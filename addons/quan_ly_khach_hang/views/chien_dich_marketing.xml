@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequence -->
+        <record id="seq_chien_dich_marketing" model="ir.sequence">
+            <field name="name">Chiến dịch Marketing</field>
+            <field name="code">chien_dich_marketing</field>
+            <field name="prefix">MKT-%(year)s</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_chien_dich_marketing_tree" model="ir.ui.view">
+            <field name="name">chien_dich_marketing.tree</field>
+            <field name="model">chien_dich_marketing</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='hoan_thanh'" decoration-info="trang_thai=='dang_chay'" decoration-muted="trang_thai=='huy'">
+                    <field name="ma_chien_dich"/>
+                    <field name="ten_chien_dich"/>
+                    <field name="loai_chien_dich"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="ngan_sach" widget="monetary"/>
+                    <field name="so_khach_muc_tieu"/>
+                    <field name="ty_le_phan_hoi" widget="progressbar"/>
+                    <field name="roi" string="ROI"/>
+                    <field name="nhan_vien_phu_trach_id"/>
+                    <field name="trang_thai" widget="badge" decoration-info="trang_thai=='dang_chay'" decoration-success="trang_thai=='hoan_thanh'" decoration-muted="trang_thai=='huy'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_chien_dich_marketing_form" model="ir.ui.view">
+            <field name="name">chien_dich_marketing.form</field>
+            <field name="model">chien_dich_marketing</field>
+            <field name="arch" type="xml">
+                <form string="Chiến dịch Marketing">
+                    <header>
+                        <button name="action_len_ke_hoach" string="Lên kế hoạch" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_bat_dau" string="Bắt đầu chạy" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'len_ke_hoach')]}"/>
+                        <button name="action_hoan_thanh" string="Hoàn thành" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'dang_chay')]}"/>
+                        <button name="action_huy" string="Hủy" type="object" attrs="{'invisible': [('trang_thai', 'in', ['hoan_thanh', 'huy'])]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,len_ke_hoach,dang_chay,hoan_thanh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ten_chien_dich" placeholder="Tên chiến dịch..."/></h1>
+                            <h3><field name="ma_chien_dich"/></h3>
+                        </div>
+                        <group>
+                            <group string="Thông tin chiến dịch">
+                                <field name="loai_chien_dich"/>
+                                <field name="nhan_vien_phu_trach_id"/>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                            </group>
+                            <group string="Ngân sách &amp; KPI">
+                                <field name="ngan_sach"/>
+                                <field name="chi_phi_thuc_te"/>
+                                <field name="doanh_thu_tu_chien_dich"/>
+                                <field name="roi" string="ROI (%)"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Đối tượng mục tiêu">
+                                <group>
+                                    <group>
+                                        <field name="doi_tuong_muc_tieu"/>
+                                        <field name="phan_tang_muc_tieu" attrs="{'invisible': [('doi_tuong_muc_tieu', '!=', 'phan_tang')]}"/>
+                                        <field name="vong_doi_muc_tieu" attrs="{'invisible': [('doi_tuong_muc_tieu', '!=', 'vong_doi')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="so_khach_muc_tieu"/>
+                                        <field name="so_khach_phan_hoi"/>
+                                        <field name="ty_le_phan_hoi"/>
+                                        <field name="so_co_hoi_tao"/>
+                                    </group>
+                                </group>
+                                <button name="action_loc_khach_hang" string="🔍 Lọc khách hàng theo tiêu chí" type="object" class="oe_highlight mb-3"
+                                        attrs="{'invisible': [('doi_tuong_muc_tieu', '=', 'tuy_chon')]}"/>
+                                <field name="khach_hang_ids" widget="many2many_tags"/>
+                            </page>
+                            <page string="Mô tả">
+                                <field name="mo_ta"/>
+                            </page>
+                            <page string="Ghi chú">
+                                <field name="ghi_chu"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_chien_dich_marketing_search" model="ir.ui.view">
+            <field name="name">chien_dich_marketing.search</field>
+            <field name="model">chien_dich_marketing</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm chiến dịch">
+                    <field name="ten_chien_dich"/>
+                    <field name="ma_chien_dich"/>
+                    <filter name="filter_dang_chay" string="Đang chạy" domain="[('trang_thai', '=', 'dang_chay')]"/>
+                    <filter name="filter_hoan_thanh" string="Hoàn thành" domain="[('trang_thai', '=', 'hoan_thanh')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_loai" string="Loại" context="{'group_by': 'loai_chien_dich'}"/>
+                        <filter name="group_trang_thai" string="Trạng thái" context="{'group_by': 'trang_thai'}"/>
+                        <filter name="group_nv" string="Người phụ trách" context="{'group_by': 'nhan_vien_phu_trach_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_chien_dich_marketing" model="ir.actions.act_window">
+            <field name="name">Chiến dịch Marketing</field>
+            <field name="res_model">chien_dich_marketing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_chien_dich_marketing_search"/>
+        </record>
+    </data>
+</odoo>

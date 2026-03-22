@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem
+            id="menu_root"
+            name="Nhân sự"
+            web_icon="nhan_su,static/description/icon.png"
+            sequence="0"/>
+          
+        <menuitem name="Dashboard" 
+            id="menu_dashboard" 
+            parent="menu_root" 
+            sequence="0"
+            action="action_nhan_su_dashboard_client"
+        />
+          
+        <menuitem name="Nhân viên" 
+            id="menu_nhan_vien" 
+            parent="menu_root" 
+            sequence="1"
+            action="action_nhan_vien"
+        />
+
+        <!-- Hợp đồng lao động -->
+        <menuitem name="Hợp đồng lao động" 
+            id="menu_hop_dong_lao_dong" 
+            parent="menu_root" 
+            sequence="5"
+            action="action_hop_dong_lao_dong"
+        />
+
+        <!-- Nghỉ phép -->
+        <menuitem name="Nghỉ phép" 
+            id="menu_nghi_phep_parent" 
+            parent="menu_root" 
+            sequence="10"
+        />
+        <menuitem name="Đơn nghỉ phép" 
+            id="menu_nghi_phep" 
+            parent="menu_nghi_phep_parent" 
+            sequence="1"
+            action="action_nghi_phep"
+        />
+        <menuitem name="Số ngày phép" 
+            id="menu_so_nghi_phep" 
+            parent="menu_nghi_phep_parent" 
+            sequence="2"
+            action="action_so_nghi_phep"
+        />
+
+        <!-- Bảng lương -->
+        <menuitem name="Bảng lương" 
+            id="menu_bang_luong" 
+            parent="menu_root" 
+            sequence="15"
+            action="action_bang_luong"
+        />
+
+        <!-- Đánh giá KPI -->
+        <menuitem name="Đánh giá KPI" 
+            id="menu_danh_gia_kpi" 
+            parent="menu_root" 
+            sequence="20"
+            action="action_danh_gia_kpi"
+        />
+
+        <!-- Đào tạo -->
+        <menuitem name="Đào tạo" 
+            id="menu_dao_tao" 
+            parent="menu_root" 
+            sequence="25"
+            action="action_dao_tao"
+        />
+
+        <!-- Báo cáo & Phân tích -->
+        <menuitem name="Báo cáo" 
+            id="menu_bao_cao" 
+            parent="menu_root" 
+            sequence="28"
+        />
+        <menuitem name="Lịch nghỉ phép" 
+            id="menu_nghi_phep_calendar" 
+            parent="menu_bao_cao" 
+            sequence="1"
+            action="action_nghi_phep_calendar"
+        />
+        <menuitem name="Phân tích lương" 
+            id="menu_bang_luong_pivot" 
+            parent="menu_bao_cao" 
+            sequence="2"
+            action="action_bang_luong_pivot"
+        />
+        <menuitem name="Lịch đào tạo" 
+            id="menu_dao_tao_calendar" 
+            parent="menu_bao_cao" 
+            sequence="3"
+            action="action_dao_tao_calendar"
+        />
+        <menuitem name="Phân tích KPI" 
+            id="menu_danh_gia_kpi_analysis" 
+            parent="menu_bao_cao" 
+            sequence="4"
+            action="action_danh_gia_kpi_analysis"
+        />
+
+        <!-- Lịch sử công tác -->
+        <menuitem name="Lịch sử công tác" 
+            id="menu_lich_su_cong_tac" 
+            parent="menu_root" 
+            sequence="30"
+            action="action_lich_su_cong_tac"
+        />
+
+        <!-- Danh mục -->
+        <menuitem name="Danh mục" 
+            id="menu_danh_muc_chung" 
+            parent="menu_root" 
+            sequence="100"
+        />
+        <menuitem name="Đơn vị / Phòng ban" 
+            id="menu_don_vi" 
+            parent="menu_danh_muc_chung" 
+            sequence="1"
+            action="action_don_vi"
+        />
+        <menuitem name="Chức vụ" 
+            id="menu_chuc_vu" 
+            parent="menu_danh_muc_chung" 
+            sequence="2"
+            action="action_chuc_vu"
+        />
+        <menuitem name="Chứng chỉ &amp; Bằng cấp" 
+            id="menu_chung_chi_bang_cap" 
+            parent="menu_danh_muc_chung" 
+            sequence="3"
+            action="action_chung_chi_bang_cap"
+        />
+        <menuitem name="DS chứng chỉ nhân viên" 
+            id="menu_danh_sach_chung_chi_bang_cap" 
+            parent="menu_danh_muc_chung" 
+            sequence="4"
+            action="action_danh_sach_chung_chi_bang_cap"
+        />
+    </data>
+</odoo>

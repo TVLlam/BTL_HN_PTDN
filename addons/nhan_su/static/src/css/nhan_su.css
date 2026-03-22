@@ -1,0 +1,404 @@
+/* Theme tokens for HRM */
+:root {
+  --hr-bg: #0b1220;
+  --hr-surface: #0f172a;
+  --hr-card: rgba(255, 255, 255, 0.04);
+  --hr-border: rgba(255, 255, 255, 0.08);
+  --hr-primary: #7c3aed;
+  --hr-primary-2: #22d3ee;
+  --hr-text: #e2e8f0;
+  --hr-muted: #94a3b8;
+  --hr-glow: 0 12px 45px rgba(124, 58, 237, 0.25);
+  --hr-radius: 16px;
+}
+
+/* Background and layout scoped to HR dashboards/kanban only */
+.o_action_manager .o_nhan_su_dashboard,
+.o_action_manager .nhan_vien_kanban_rows {
+  background: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.18), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(34, 211, 238, 0.16), transparent 30%),
+    linear-gradient(160deg, #0b1020 0%, #0c1427 60%, #0b1220 100%) !important;
+  color: var(--hr-text);
+}
+
+/* ============================================
+   LAYER 2: DEPARTMENT SECTION CARDS
+   ============================================ */
+.nhan_vien_kanban_rows .o_kanban_group {
+  background: var(--hr-card) !important;
+  border-radius: var(--hr-radius) !important;
+  padding: 22px 26px !important;
+  margin-top: 30px !important;
+  box-shadow: var(--hr-glow) !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  border: 1px solid var(--hr-border) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   LAYER 3: DEPARTMENT HEADER WITH INFO
+   ============================================ */
+.nhan_vien_kanban_rows .o_kanban_header {
+  background-color: transparent !important;
+  padding: 0 0 14px 0 !important;
+  border-bottom: 1px dashed var(--hr-border) !important;
+  margin-bottom: 18px !important;
+}
+
+.nhan_vien_kanban_rows .o_kanban_header_title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #e2e8f0 !important;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   DASHBOARD UI
+   ============================================ */
+.o_nhan_su_dashboard {
+  color: var(--hr-text);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.o_nhan_su_dashboard h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.2px;
+}
+
+.o_action_manager .o_nhan_su_dashboard {
+  overflow-y: auto;
+  max-height: calc(100vh - 90px);
+  padding-bottom: 24px;
+}
+
+.o_nhan_su_filters .form-control {
+  min-width: 180px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.o_nhan_su_stat_card {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(34, 211, 238, 0.08));
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  height: 100%;
+  color: #f1f5f9;
+}
+
+.o_nhan_su_stat_card .stat_label {
+  font-size: 12px;
+  color: var(--hr-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.o_nhan_su_stat_card .stat_value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-top: 6px;
+}
+
+.o_nhan_su_recent_table {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.o_nhan_su_card {
+  border-radius: 16px;
+  border: 1px solid var(--hr-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+}
+
+.o_nhan_su_alerts {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.o_nhan_su_alerts li {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--hr-border);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--hr-text);
+}
+
+.nhan_vien_kanban_rows .o_kanban_counter {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+/* ============================================
+   LAYER 4: EMPLOYEE CARD WITH FOCUS
+   ============================================ */
+.employee-card {
+  width: 260px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+  border: 1px solid var(--hr-border);
+  border-left: 5px solid #e5e7eb;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.employee-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.32), var(--hr-glow);
+  z-index: 10;
+}
+
+/* ============================================
+   LAYER 5: VISUAL HIERARCHY BY ROLE
+   ============================================ */
+.employee-card[data-role*="Giám đốc"],
+.employee-card[data-role*="giám đốc"],
+.employee-card[data-role*="Giam doc"],
+.employee-card[data-role*="GĐ"] {
+  border-left: 5px solid #7c3aed;
+}
+
+.employee-card[data-role*="Trưởng phòng"],
+.employee-card[data-role*="truong phong"],
+.employee-card[data-role*="Truong phong"],
+.employee-card[data-role*="TP"] {
+  border-left: 5px solid #0ea5e9;
+}
+
+.employee-card[data-role*="Nhân viên"],
+.employee-card[data-role*="nhan vien"],
+.employee-card[data-role*="Nhan vien"] {
+  border-left: 5px solid #22c55e;
+}
+
+.employee-card[data-role*="Bảo vệ"],
+.employee-card[data-role*="bao ve"],
+.employee-card[data-role*="Bao ve"] {
+  border-left: 5px solid #f97316;
+}
+
+/* Employee Card Elements */
+.employee-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.employee-name {
+  font-weight: 700;
+  font-size: 17px;
+  color: #e2e8f0;
+  line-height: 1.35;
+  letter-spacing: 0.1px;
+}
+
+/* Role Badge Styles */
+.role-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.role-badge[data-role*="Giám đốc"],
+.role-badge[data-role*="giám đốc"],
+.role-badge[data-role*="Giam doc"],
+.role-badge[data-role*="GĐ"] {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.role-badge[data-role*="Trưởng phòng"],
+.role-badge[data-role*="truong phong"],
+.role-badge[data-role*="Truong phong"],
+.role-badge[data-role*="TP"] {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.role-badge[data-role*="Nhân viên"],
+.role-badge[data-role*="nhan vien"],
+.role-badge[data-role*="Nhan vien"] {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.role-badge[data-role*="Bảo vệ"],
+.role-badge[data-role*="bao ve"],
+.role-badge[data-role*="Bao ve"] {
+  background: #fed7aa;
+  color: #c2410c;
+}
+
+/* Color scale based on cap_do (lower = higher level).
+   We'll color by attribute `data-level` on the badge. */
+.role-badge[data-level="1"] {
+  background: #efe8ff;
+  color: #5b21b6;
+}
+.role-badge[data-level="2"] {
+  background: #e8f6ff;
+  color: #0369a1;
+}
+.role-badge[data-level="3"] {
+  background: #ecfdf5;
+  color: #15803d;
+}
+.role-badge[data-level="4"] {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.role-badge[data-level="6"] {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Level 6 (additional) */
+.role-badge[data-level="5"] {
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
+/* Similarly for card left border color by level */
+.employee-card[data-level="1"] {
+  border-left-color: #7c3aed;
+}
+.employee-card[data-level="2"] {
+  border-left-color: #0ea5e9;
+}
+.employee-card[data-level="3"] {
+  border-left-color: #22c55e;
+}
+.employee-card[data-level="4"] {
+  border-left-color: #f97316;
+}
+.employee-card[data-level="6"] {
+  border-left-color: #9ca3af;
+}
+
+/* Level 6 (additional) */
+.employee-card[data-level="5"] {
+  border-left-color: #ef4444;
+}
+
+/* Level 7 (additional, lowest priority) */
+.role-badge[data-level="7"] {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.employee-card[data-level="7"] {
+  border-left-color: #64748b;
+}
+
+.employee-divider {
+  border-top: 1px solid #f1f5f9;
+  margin: 12px 0;
+}
+
+.employee-details {
+  margin-bottom: 12px;
+}
+
+.employee-info {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.employee-info strong {
+  color: #374151;
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.employee-actions .btn {
+  font-size: 12px;
+  padding: 6px 14px;
+  font-weight: 500;
+}
+
+.employee-actions .btn-light {
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.employee-actions .btn-light:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Override the Kanban container to be a column layout */
+.o_kanban_view.nhan_vien_kanban_rows {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+/* Dept-level filter button styles injected by JS */
+.dept-level-filters .btn {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+.dept-level-filters .btn:hover {
+  background: #f8fafc;
+}
+
+/* filtering behaviour: hide all records then show only matching level */
+.o_kanban_group[class*="filter-level-"] .o_kanban_record {
+  display: none !important;
+}
+.o_kanban_group.filter-level-4 .o_kanban_record[data-level="4"] {
+  display: inline-block !important;
+}
+.o_kanban_group.filter-level-5 .o_kanban_record[data-level="5"] {
+  display: inline-block !important;
+}
+.o_kanban_group.filter-level-6 .o_kanban_record[data-level="6"] {
+  display: inline-block !important;
+}
+.o_kanban_group.filter-level-7 .o_kanban_record[data-level="7"] {
+  display: inline-block !important;
+}
+
+/* The card container within the group */
+.nhan_vien_kanban_rows .o_kanban_group .o_kanban_record {
+  width: 260px !important;
+  display: inline-block !important;
+  vertical-align: top;
+  margin: 0 16px 16px 0 !important;
+}
+
+/* Hide the ghost div usually present in kanban */
+.nhan_vien_kanban_rows .o_kanban_ghost {
+  display: none !important;
+}

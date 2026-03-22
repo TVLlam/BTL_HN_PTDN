@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequence -->
+        <record id="seq_luu_tru_van_ban" model="ir.sequence">
+            <field name="name">Lưu trữ văn bản</field>
+            <field name="code">luu_tru_van_ban</field>
+            <field name="prefix">LT-%(year)s</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_luu_tru_van_ban_tree" model="ir.ui.view">
+            <field name="name">luu_tru_van_ban.tree</field>
+            <field name="model">luu_tru_van_ban</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='luu_tru'" decoration-warning="trang_thai=='cho_huy'" decoration-danger="trang_thai=='da_huy'" decoration-info="trang_thai=='thu_hoi'">
+                    <field name="ma_luu_tru"/>
+                    <field name="so_ky_hieu"/>
+                    <field name="trich_yeu"/>
+                    <field name="loai_van_ban"/>
+                    <field name="vi_tri_luu_tru"/>
+                    <field name="thoi_han_luu_tru"/>
+                    <field name="ngay_luu_tru"/>
+                    <field name="ngay_het_han"/>
+                    <field name="nguoi_luu_tru_id"/>
+                    <field name="trang_thai" widget="badge" decoration-success="trang_thai=='luu_tru'" decoration-warning="trang_thai=='cho_huy'" decoration-danger="trang_thai=='da_huy'" decoration-info="trang_thai=='thu_hoi'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_luu_tru_van_ban_form" model="ir.ui.view">
+            <field name="name">luu_tru_van_ban.form</field>
+            <field name="model">luu_tru_van_ban</field>
+            <field name="arch" type="xml">
+                <form string="Lưu trữ văn bản">
+                    <header>
+                        <button name="action_de_xuat_huy" string="Đề xuất hủy" type="object" attrs="{'invisible': [('trang_thai', '!=', 'luu_tru')]}"/>
+                        <button name="action_duyet_huy" string="Duyệt hủy" type="object" class="btn-danger" attrs="{'invisible': [('trang_thai', '!=', 'cho_huy')]}"/>
+                        <button name="action_thu_hoi" string="Thu hồi" type="object" class="btn-warning" attrs="{'invisible': [('trang_thai', '!=', 'luu_tru')]}"/>
+                        <button name="action_luu_tru_lai" string="Lưu trữ lại" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'thu_hoi')]}"/>
+                        <field name="trang_thai" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ma_luu_tru"/></h1>
+                        </div>
+                        <group>
+                            <group string="Văn bản">
+                                <field name="loai_van_ban"/>
+                                <field name="van_ban_den_id" attrs="{'invisible': [('loai_van_ban', '!=', 'van_ban_den')], 'required': [('loai_van_ban', '=', 'van_ban_den')]}"/>
+                                <field name="van_ban_di_id" attrs="{'invisible': [('loai_van_ban', '!=', 'van_ban_di')], 'required': [('loai_van_ban', '=', 'van_ban_di')]}"/>
+                                <field name="so_ky_hieu" readonly="1"/>
+                                <field name="trich_yeu" readonly="1"/>
+                            </group>
+                            <group string="Lưu trữ">
+                                <field name="nguoi_luu_tru_id"/>
+                                <field name="vi_tri_luu_tru"/>
+                                <field name="thoi_han_luu_tru"/>
+                                <field name="ngay_luu_tru"/>
+                                <field name="ngay_het_han"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Ghi chú">
+                                <field name="ghi_chu"/>
+                            </page>
+                            <page string="Thu hồi" attrs="{'invisible': [('trang_thai', 'not in', ['thu_hoi'])]}">
+                                <group>
+                                    <field name="ly_do_thu_hoi"/>
+                                    <field name="nguoi_thu_hoi_id"/>
+                                    <field name="ngay_thu_hoi"/>
+                                </group>
+                            </page>
+                            <page string="Hủy" attrs="{'invisible': [('trang_thai', 'not in', ['cho_huy', 'da_huy'])]}">
+                                <group>
+                                    <field name="ly_do_huy"/>
+                                    <field name="nguoi_duyet_huy_id"/>
+                                    <field name="ngay_huy"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_luu_tru_van_ban_search" model="ir.ui.view">
+            <field name="name">luu_tru_van_ban.search</field>
+            <field name="model">luu_tru_van_ban</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm lưu trữ">
+                    <field name="ma_luu_tru"/>
+                    <field name="so_ky_hieu"/>
+                    <field name="trich_yeu"/>
+                    <filter name="filter_luu_tru" string="Đang lưu trữ" domain="[('trang_thai', '=', 'luu_tru')]"/>
+                    <filter name="filter_cho_huy" string="Chờ hủy" domain="[('trang_thai', '=', 'cho_huy')]"/>
+                    <filter name="filter_thu_hoi" string="Đã thu hồi" domain="[('trang_thai', '=', 'thu_hoi')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_loai" string="Loại VB" context="{'group_by': 'loai_van_ban'}"/>
+                        <filter name="group_thoi_han" string="Thời hạn" context="{'group_by': 'thoi_han_luu_tru'}"/>
+                        <filter name="group_vi_tri" string="Vị trí" context="{'group_by': 'vi_tri_luu_tru'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_luu_tru_van_ban" model="ir.actions.act_window">
+            <field name="name">Lưu trữ văn bản</field>
+            <field name="res_model">luu_tru_van_ban</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_luu_tru_van_ban_search"/>
+        </record>
+    </data>
+</odoo>

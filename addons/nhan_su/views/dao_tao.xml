@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_dao_tao_tree" model="ir.ui.view">
+            <field name="name">dao_tao.tree</field>
+            <field name="model">dao_tao</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ma_dao_tao"/>
+                    <field name="ten_chuong_trinh"/>
+                    <field name="loai_dao_tao"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="so_luong_tham_gia"/>
+                    <field name="chi_phi"/>
+                    <field name="trang_thai" widget="badge" decoration-success="trang_thai=='hoan_thanh'" decoration-info="trang_thai=='dang_dien_ra'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_dao_tao_form" model="ir.ui.view">
+            <field name="name">dao_tao.form</field>
+            <field name="model">dao_tao</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_bat_dau" string="Bắt đầu" type="object" class="btn-primary" attrs="{'invisible': [('trang_thai', '!=', 'du_kien')]}"/>
+                        <button name="action_hoan_thanh" string="Hoàn thành" type="object" class="btn-success" attrs="{'invisible': [('trang_thai', '!=', 'dang_dien_ra')]}"/>
+                        <button name="action_huy" string="Hủy" type="object" attrs="{'invisible': [('trang_thai', 'in', ['hoan_thanh', 'huy'])]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="du_kien,dang_dien_ra,hoan_thanh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ten_chuong_trinh"/></h1>
+                            <h3><field name="ma_dao_tao"/></h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="loai_dao_tao"/>
+                                <field name="giang_vien"/>
+                                <field name="dia_diem"/>
+                            </group>
+                            <group>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                                <field name="so_gio"/>
+                                <field name="chi_phi"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Nội dung">
+                                <field name="mo_ta"/>
+                            </page>
+                            <page string="Nhân viên tham gia">
+                                <field name="nhan_vien_ids">
+                                    <tree>
+                                        <field name="ma_dinh_danh"/>
+                                        <field name="ho_va_ten"/>
+                                        <field name="don_vi_hien_tai"/>
+                                        <field name="chuc_vu_hien_tai"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <field name="so_luong_tham_gia"/>
+                                </group>
+                            </page>
+                            <page string="Kết quả">
+                                <group>
+                                    <field name="ket_qua"/>
+                                    <field name="file_tai_lieu" filename="file_tai_lieu_name"/>
+                                    <field name="file_tai_lieu_name" invisible="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_dao_tao_search" model="ir.ui.view">
+            <field name="name">dao_tao.search</field>
+            <field name="model">dao_tao</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="ten_chuong_trinh"/>
+                    <filter name="dang_dien_ra" string="Đang diễn ra" domain="[('trang_thai','=','dang_dien_ra')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Loại" name="group_loai" context="{'group_by': 'loai_dao_tao'}"/>
+                        <filter string="Trạng thái" name="group_tt" context="{'group_by': 'trang_thai'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_dao_tao" model="ir.actions.act_window">
+            <field name="name">Chương trình đào tạo</field>
+            <field name="res_model">dao_tao</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_dao_tao_search"/>
+        </record>
+
+        <!-- Sequence -->
+        <record id="seq_dao_tao" model="ir.sequence">
+            <field name="name">Đào tạo</field>
+            <field name="code">dao_tao</field>
+            <field name="prefix">DT-</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

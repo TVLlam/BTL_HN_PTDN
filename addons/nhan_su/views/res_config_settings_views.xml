@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_email" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.nhan_su.email</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Email thông báo" string="Email thông báo" data-key="nhan_su">
+                    <h2>Cấu hình Email thông báo (Gmail)</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label for="gmail_notification_email"/>
+                                <div class="text-muted">
+                                    Địa chỉ Gmail dùng để gửi thông báo tự động (VD: company@gmail.com)
+                                </div>
+                                <div class="content-group">
+                                    <field name="gmail_notification_email" placeholder="your-email@gmail.com"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label for="gmail_notification_password"/>
+                                <div class="text-muted">
+                                    App Password (16 ký tự) — Lấy tại: Google Account → Security → 2-Step Verification → App passwords
+                                </div>
+                                <div class="content-group">
+                                    <field name="gmail_notification_password" password="True" placeholder="xxxx xxxx xxxx xxxx"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt8">
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                <strong>Hướng dẫn:</strong><br/>
+                                1. Bật Xác minh 2 bước (2-Step Verification) cho tài khoản Google<br/>
+                                2. Vào <a href="https://myaccount.google.com/apppasswords" target="_blank">App Passwords</a><br/>
+                                3. Tạo password cho ứng dụng "Mail" → Copy 16 ký tự vào ô trên<br/>
+                                4. Hoặc thiết lập trong file <code>.env</code>: <code>GMAIL_EMAIL=...</code> và <code>GMAIL_APP_PASSWORD=...</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

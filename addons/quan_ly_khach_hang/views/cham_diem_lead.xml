@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_cham_diem_lead_tree" model="ir.ui.view">
+            <field name="name">cham_diem_lead.tree</field>
+            <field name="model">cham_diem_lead</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="xep_hang=='nong'" decoration-warning="xep_hang=='am'" decoration-info="xep_hang=='lanh'" decoration-muted="xep_hang=='dong_bang'">
+                    <field name="khach_hang_id"/>
+                    <field name="nhan_vien_phu_trach_id"/>
+                    <field name="diem_tuong_tac"/>
+                    <field name="diem_doanh_thu"/>
+                    <field name="diem_phan_hoi"/>
+                    <field name="diem_trung_thanh"/>
+                    <field name="diem_co_hoi"/>
+                    <field name="tong_diem"/>
+                    <field name="xep_hang" widget="badge" decoration-danger="xep_hang=='nong'" decoration-warning="xep_hang=='am'" decoration-info="xep_hang=='lanh'" decoration-muted="xep_hang=='dong_bang'"/>
+                    <field name="ngay_tinh_diem" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_cham_diem_lead_form" model="ir.ui.view">
+            <field name="name">cham_diem_lead.form</field>
+            <field name="model">cham_diem_lead</field>
+            <field name="arch" type="xml">
+                <form string="Chấm điểm Lead">
+                    <header>
+                        <button name="action_tinh_lai_diem" string="🔄 Tính lại điểm" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"/>
+                        <group>
+                            <group string="Thông tin">
+                                <field name="khach_hang_id"/>
+                                <field name="nhan_vien_phu_trach_id"/>
+                                <field name="ngay_tinh_diem"/>
+                            </group>
+                            <group string="Kết quả">
+                                <field name="tong_diem"/>
+                                <field name="xep_hang"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Chi tiết điểm">
+                                <group>
+                                    <group>
+                                        <field name="diem_tuong_tac" string="Tương tác (max 25)"/>
+                                        <field name="diem_doanh_thu" string="Doanh thu (max 30)"/>
+                                        <field name="diem_phan_hoi" string="Phản hồi KS (max 15)"/>
+                                    </group>
+                                    <group>
+                                        <field name="diem_trung_thanh" string="Trung thành (max 15)"/>
+                                        <field name="diem_co_hoi" string="Cơ hội mở (max 15)"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Ghi chú">
+                                <field name="ghi_chu"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_cham_diem_lead_search" model="ir.ui.view">
+            <field name="name">cham_diem_lead.search</field>
+            <field name="model">cham_diem_lead</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm Lead">
+                    <field name="khach_hang_id"/>
+                    <field name="nhan_vien_phu_trach_id"/>
+                    <filter name="filter_nong" string="Nóng (Hot)" domain="[('xep_hang', '=', 'nong')]"/>
+                    <filter name="filter_am" string="Ấm (Warm)" domain="[('xep_hang', '=', 'am')]"/>
+                    <filter name="filter_lanh" string="Lạnh (Cold)" domain="[('xep_hang', '=', 'lanh')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_xep_hang" string="Xếp hạng" context="{'group_by': 'xep_hang'}"/>
+                        <filter name="group_nv" string="NV phụ trách" context="{'group_by': 'nhan_vien_phu_trach_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_cham_diem_lead" model="ir.actions.act_window">
+            <field name="name">Chấm điểm Lead</field>
+            <field name="res_model">cham_diem_lead</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_cham_diem_lead_search"/>
+        </record>
+    </data>
+</odoo>

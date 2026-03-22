@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequence -->
+        <record id="seq_so_cong_van" model="ir.sequence">
+            <field name="name">Sổ công văn</field>
+            <field name="code">so_cong_van</field>
+            <field name="prefix">SCV-%(year)s</field>
+            <field name="padding">3</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_so_cong_van_tree" model="ir.ui.view">
+            <field name="name">so_cong_van.tree</field>
+            <field name="model">so_cong_van</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='mo'" decoration-muted="trang_thai=='khoa'">
+                    <field name="ma_so"/>
+                    <field name="ten_so"/>
+                    <field name="loai_so"/>
+                    <field name="nam"/>
+                    <field name="don_vi_id"/>
+                    <field name="nguoi_quan_ly_id"/>
+                    <field name="so_luong_van_ban"/>
+                    <field name="trang_thai" widget="badge" decoration-success="trang_thai=='mo'" decoration-muted="trang_thai=='khoa'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_so_cong_van_form" model="ir.ui.view">
+            <field name="name">so_cong_van.form</field>
+            <field name="model">so_cong_van</field>
+            <field name="arch" type="xml">
+                <form string="Sổ công văn">
+                    <header>
+                        <button name="action_khoa_so" string="Khóa sổ" type="object" class="btn-danger" attrs="{'invisible': [('trang_thai', '!=', 'mo')]}"/>
+                        <button name="action_mo_so" string="Mở sổ" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'khoa')]}"/>
+                        <field name="trang_thai" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ten_so" placeholder="Tên sổ công văn..."/></h1>
+                            <h3><field name="ma_so"/></h3>
+                        </div>
+                        <group>
+                            <group string="Thông tin">
+                                <field name="loai_so"/>
+                                <field name="nam"/>
+                                <field name="don_vi_id"/>
+                                <field name="nguoi_quan_ly_id"/>
+                            </group>
+                            <group string="Thống kê">
+                                <field name="so_luong_van_ban"/>
+                            </group>
+                        </group>
+                        <field name="mo_ta" placeholder="Mô tả..."/>
+                        <notebook>
+                            <page string="Văn bản đến" attrs="{'invisible': [('loai_so', '!=', 'den')]}">
+                                <field name="van_ban_den_ids">
+                                    <tree>
+                                        <field name="so_ky_hieu"/>
+                                        <field name="ngay_den"/>
+                                        <field name="noi_ban_hanh"/>
+                                        <field name="trich_yeu"/>
+                                        <field name="trang_thai" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Văn bản đi" attrs="{'invisible': [('loai_so', '!=', 'di')]}">
+                                <field name="van_ban_di_ids">
+                                    <tree>
+                                        <field name="so_ky_hieu"/>
+                                        <field name="ngay_van_ban"/>
+                                        <field name="noi_nhan"/>
+                                        <field name="trich_yeu"/>
+                                        <field name="trang_thai" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_so_cong_van_search" model="ir.ui.view">
+            <field name="name">so_cong_van.search</field>
+            <field name="model">so_cong_van</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm sổ công văn">
+                    <field name="ten_so"/>
+                    <field name="ma_so"/>
+                    <filter name="filter_den" string="Sổ đến" domain="[('loai_so', '=', 'den')]"/>
+                    <filter name="filter_di" string="Sổ đi" domain="[('loai_so', '=', 'di')]"/>
+                    <separator/>
+                    <filter name="filter_mo" string="Đang mở" domain="[('trang_thai', '=', 'mo')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_nam" string="Năm" context="{'group_by': 'nam'}"/>
+                        <filter name="group_loai" string="Loại sổ" context="{'group_by': 'loai_so'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_so_cong_van" model="ir.actions.act_window">
+            <field name="name">Sổ công văn</field>
+            <field name="res_model">so_cong_van</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_so_cong_van_search"/>
+        </record>
+    </data>
+</odoo>

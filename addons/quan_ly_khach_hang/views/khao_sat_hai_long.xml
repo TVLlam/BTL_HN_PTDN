@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequence -->
+        <record id="seq_khao_sat_hai_long" model="ir.sequence">
+            <field name="name">Khảo sát hài lòng</field>
+            <field name="code">khao_sat_hai_long</field>
+            <field name="prefix">KS-%(year)s</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_khao_sat_hai_long_tree" model="ir.ui.view">
+            <field name="name">khao_sat_hai_long.tree</field>
+            <field name="model">khao_sat_hai_long</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='da_phan_hoi'" decoration-muted="trang_thai=='dong'" decoration-info="trang_thai=='da_gui'">
+                    <field name="ma_khao_sat"/>
+                    <field name="khach_hang_id"/>
+                    <field name="loai_khao_sat"/>
+                    <field name="don_hang_id" optional="show"/>
+                    <field name="diem_trung_binh" widget="progressbar" options="{'max_value': 5}"/>
+                    <field name="diem_nps" optional="show"/>
+                    <field name="nhom_nps" optional="show"/>
+                    <field name="ngay_gui"/>
+                    <field name="ngay_phan_hoi"/>
+                    <field name="trang_thai" widget="badge" decoration-info="trang_thai=='da_gui'" decoration-success="trang_thai=='da_phan_hoi'" decoration-muted="trang_thai=='dong'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_khao_sat_hai_long_form" model="ir.ui.view">
+            <field name="name">khao_sat_hai_long.form</field>
+            <field name="model">khao_sat_hai_long</field>
+            <field name="arch" type="xml">
+                <form string="Khảo sát hài lòng">
+                    <header>
+                        <button name="action_gui_khao_sat" string="Gửi khảo sát" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_ghi_nhan_phan_hoi" string="Ghi nhận phản hồi" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'da_gui')]}"/>
+                        <button name="action_dong" string="Đóng" type="object" attrs="{'invisible': [('trang_thai', 'in', ['nhap', 'dong'])]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,da_gui,da_phan_hoi,dong"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Thông tin chung">
+                                <field name="ma_khao_sat"/>
+                                <field name="loai_khao_sat"/>
+                                <field name="khach_hang_id"/>
+                                <field name="don_hang_id" domain="[('khach_hang_id', '=', khach_hang_id)]"/>
+                                <field name="nhan_vien_phu_trach_id"/>
+                            </group>
+                            <group string="Thời gian">
+                                <field name="ngay_gui"/>
+                                <field name="ngay_phan_hoi"/>
+                                <field name="diem_trung_binh"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Đánh giá CSAT" attrs="{'invisible': [('loai_khao_sat', '!=', 'csat')]}">
+                                <group>
+                                    <group>
+                                        <field name="diem_tong_the" widget="radio"/>
+                                        <field name="diem_chat_luong" widget="radio"/>
+                                        <field name="diem_gia_ca" widget="radio"/>
+                                    </group>
+                                    <group>
+                                        <field name="diem_giao_hang" widget="radio"/>
+                                        <field name="diem_ho_tro" widget="radio"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Đánh giá NPS" attrs="{'invisible': [('loai_khao_sat', '!=', 'nps')]}">
+                                <group>
+                                    <field name="diem_nps"/>
+                                    <field name="nhom_nps"/>
+                                </group>
+                            </page>
+                            <page string="Ý kiến">
+                                <field name="y_kien" placeholder="Ý kiến / đánh giá của khách hàng..."/>
+                                <field name="de_xuat_cai_tien" placeholder="Đề xuất cải tiến..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_khao_sat_hai_long_search" model="ir.ui.view">
+            <field name="name">khao_sat_hai_long.search</field>
+            <field name="model">khao_sat_hai_long</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm khảo sát">
+                    <field name="ma_khao_sat"/>
+                    <field name="khach_hang_id"/>
+                    <filter name="filter_csat" string="CSAT" domain="[('loai_khao_sat', '=', 'csat')]"/>
+                    <filter name="filter_nps" string="NPS" domain="[('loai_khao_sat', '=', 'nps')]"/>
+                    <separator/>
+                    <filter name="filter_da_phan_hoi" string="Đã phản hồi" domain="[('trang_thai', '=', 'da_phan_hoi')]"/>
+                    <filter name="filter_chua_phan_hoi" string="Chưa phản hồi" domain="[('trang_thai', '=', 'da_gui')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_khach_hang" string="Khách hàng" context="{'group_by': 'khach_hang_id'}"/>
+                        <filter name="group_loai" string="Loại khảo sát" context="{'group_by': 'loai_khao_sat'}"/>
+                        <filter name="group_nhom_nps" string="Nhóm NPS" context="{'group_by': 'nhom_nps'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_khao_sat_hai_long" model="ir.actions.act_window">
+            <field name="name">Khảo sát hài lòng</field>
+            <field name="res_model">khao_sat_hai_long</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_khao_sat_hai_long_search"/>
+        </record>
+    </data>
+</odoo>

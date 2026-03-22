@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequence -->
+        <record id="seq_phieu_luan_chuyen" model="ir.sequence">
+            <field name="name">Phiếu luân chuyển</field>
+            <field name="code">phieu_luan_chuyen</field>
+            <field name="prefix">LC-%(year)s</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_phieu_luan_chuyen_tree" model="ir.ui.view">
+            <field name="name">phieu_luan_chuyen.tree</field>
+            <field name="model">phieu_luan_chuyen</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="trang_thai=='dang_luan_chuyen'" decoration-success="trang_thai=='hoan_tat'" decoration-danger="trang_thai=='thu_hoi'">
+                    <field name="ma_phieu"/>
+                    <field name="loai_van_ban"/>
+                    <field name="trich_yeu"/>
+                    <field name="nguoi_chuyen_id"/>
+                    <field name="don_vi_chuyen_id"/>
+                    <field name="han_xu_ly"/>
+                    <field name="ngay_tao"/>
+                    <field name="trang_thai" widget="badge" decoration-info="trang_thai=='dang_luan_chuyen'" decoration-success="trang_thai=='hoan_tat'" decoration-danger="trang_thai=='thu_hoi'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_phieu_luan_chuyen_form" model="ir.ui.view">
+            <field name="name">phieu_luan_chuyen.form</field>
+            <field name="model">phieu_luan_chuyen</field>
+            <field name="arch" type="xml">
+                <form string="Phiếu luân chuyển văn bản">
+                    <header>
+                        <button name="action_bat_dau_luan_chuyen" string="Bắt đầu luân chuyển" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_hoan_tat" string="Hoàn tất" type="object" class="oe_highlight" attrs="{'invisible': [('trang_thai', '!=', 'dang_luan_chuyen')]}"/>
+                        <button name="action_thu_hoi" string="Thu hồi" type="object" class="btn-danger" attrs="{'invisible': [('trang_thai', 'in', ['nhap', 'hoan_tat', 'thu_hoi'])]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,dang_luan_chuyen,hoan_tat"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ma_phieu"/></h1>
+                        </div>
+                        <group>
+                            <group string="Văn bản">
+                                <field name="loai_van_ban"/>
+                                <field name="van_ban_den_id" attrs="{'invisible': [('loai_van_ban', '!=', 'van_ban_den')], 'required': [('loai_van_ban', '=', 'van_ban_den')]}"/>
+                                <field name="van_ban_di_id" attrs="{'invisible': [('loai_van_ban', '!=', 'van_ban_di')], 'required': [('loai_van_ban', '=', 'van_ban_di')]}"/>
+                                <field name="trich_yeu" readonly="1"/>
+                            </group>
+                            <group string="Thông tin luân chuyển">
+                                <field name="nguoi_chuyen_id"/>
+                                <field name="don_vi_chuyen_id"/>
+                                <field name="han_xu_ly"/>
+                                <field name="ngay_tao"/>
+                            </group>
+                        </group>
+                        <field name="y_kien_chi_dao" placeholder="Ý kiến chỉ đạo..."/>
+                        <notebook>
+                            <page string="Lộ trình luân chuyển">
+                                <field name="chi_tiet_ids">
+                                    <tree editable="bottom">
+                                        <field name="thu_tu"/>
+                                        <field name="nguoi_nhan_id"/>
+                                        <field name="don_vi_nhan_id"/>
+                                        <field name="ngay_nhan"/>
+                                        <field name="ngay_chuyen_tiep"/>
+                                        <field name="y_kien"/>
+                                        <field name="trang_thai" widget="badge" decoration-info="trang_thai=='da_nhan'" decoration-success="trang_thai=='da_xu_ly'" decoration-warning="trang_thai=='chuyen_tiep'"/>
+                                        <button name="action_nhan_van_ban" string="Nhận" type="object" class="btn-primary btn-sm" attrs="{'invisible': [('trang_thai', '!=', 'cho_nhan')]}"/>
+                                        <button name="action_xu_ly_xong" string="Xong" type="object" class="btn-success btn-sm" attrs="{'invisible': [('trang_thai', '!=', 'da_nhan')]}"/>
+                                        <button name="action_chuyen_tiep" string="Chuyển" type="object" class="btn-info btn-sm" attrs="{'invisible': [('trang_thai', '!=', 'da_xu_ly')]}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_phieu_luan_chuyen_search" model="ir.ui.view">
+            <field name="name">phieu_luan_chuyen.search</field>
+            <field name="model">phieu_luan_chuyen</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm phiếu luân chuyển">
+                    <field name="ma_phieu"/>
+                    <field name="nguoi_chuyen_id"/>
+                    <filter name="filter_dang_lc" string="Đang luân chuyển" domain="[('trang_thai', '=', 'dang_luan_chuyen')]"/>
+                    <filter name="filter_hoan_tat" string="Hoàn tất" domain="[('trang_thai', '=', 'hoan_tat')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_loai" string="Loại VB" context="{'group_by': 'loai_van_ban'}"/>
+                        <filter name="group_trang_thai" string="Trạng thái" context="{'group_by': 'trang_thai'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_phieu_luan_chuyen" model="ir.actions.act_window">
+            <field name="name">Phiếu luân chuyển</field>
+            <field name="res_model">phieu_luan_chuyen</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_phieu_luan_chuyen_search"/>
+        </record>
+    </data>
+</odoo>

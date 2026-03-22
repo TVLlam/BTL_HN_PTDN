@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================== -->
+    <!-- GRAPH: DOANH THU ĐƠN HÀNG -->
+    <!-- ========================== -->
+    <record id="view_don_hang_graph_bar" model="ir.ui.view">
+        <field name="name">don_hang.graph.bar</field>
+        <field name="model">don_hang</field>
+        <field name="arch" type="xml">
+            <graph string="Doanh thu đơn hàng" type="bar" stacked="True">
+                <field name="trang_thai"/>
+                <field name="tong_gia_tri" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_don_hang_graph_line" model="ir.ui.view">
+        <field name="name">don_hang.graph.line</field>
+        <field name="model">don_hang</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Xu hướng đơn hàng" type="line">
+                <field name="ngay_dat" interval="month"/>
+                <field name="tong_gia_tri" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- PIVOT: ĐƠN HÀNG -->
+    <record id="view_don_hang_pivot" model="ir.ui.view">
+        <field name="name">don_hang.pivot</field>
+        <field name="model">don_hang</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích đơn hàng">
+                <field name="khach_hang_id" type="row"/>
+                <field name="trang_thai" type="col"/>
+                <field name="tong_gia_tri" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_don_hang_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích đơn hàng</field>
+        <field name="res_model">don_hang</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+    </record>
+
+    <!-- ============================ -->
+    <!-- GRAPH: CƠ HỘI BÁN HÀNG     -->
+    <!-- ============================ -->
+    <record id="view_co_hoi_graph" model="ir.ui.view">
+        <field name="name">co_hoi_ban_hang.graph</field>
+        <field name="model">co_hoi_ban_hang</field>
+        <field name="arch" type="xml">
+            <graph string="Phân tích cơ hội" type="bar">
+                <field name="giai_doan"/>
+                <field name="gia_tri_du_kien" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_co_hoi_pivot" model="ir.ui.view">
+        <field name="name">co_hoi_ban_hang.pivot</field>
+        <field name="model">co_hoi_ban_hang</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích cơ hội bán hàng">
+                <field name="nhan_vien_phu_trach_id" type="row"/>
+                <field name="giai_doan" type="col"/>
+                <field name="gia_tri_du_kien" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_co_hoi_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích pipeline</field>
+        <field name="res_model">co_hoi_ban_hang</field>
+        <field name="view_mode">graph,pivot,kanban,tree,form</field>
+    </record>
+
+    <!-- ========================= -->
+    <!-- CALENDAR: TƯƠNG TÁC KH   -->
+    <!-- ========================= -->
+    <!-- (Existing calendar for lich_su_tuong_tac — add pivot) -->
+
+    <record id="view_tuong_tac_pivot" model="ir.ui.view">
+        <field name="name">lich_su_tuong_tac.pivot</field>
+        <field name="model">lich_su_tuong_tac</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích tương tác">
+                <field name="loai_tuong_tac" type="row"/>
+                <field name="nhan_vien_phu_trach_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ========================= -->
+    <!-- GRAPH: THANH TOÁN         -->
+    <!-- ========================= -->
+    <record id="view_thanh_toan_graph" model="ir.ui.view">
+        <field name="name">thanh_toan.graph</field>
+        <field name="model">thanh_toan</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê thanh toán" type="pie">
+                <field name="hinh_thuc"/>
+                <field name="so_tien" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_thanh_toan_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích thanh toán</field>
+        <field name="res_model">thanh_toan</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+    </record>
+
+</odoo>

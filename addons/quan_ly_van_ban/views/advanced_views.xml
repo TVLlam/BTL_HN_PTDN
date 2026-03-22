@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================== -->
+    <!-- CALENDAR: HẠN XỬ LÝ VĂN BẢN  -->
+    <!-- ============================== -->
+    <record id="view_van_ban_den_calendar" model="ir.ui.view">
+        <field name="name">van_ban_den.calendar</field>
+        <field name="model">van_ban_den</field>
+        <field name="arch" type="xml">
+            <calendar string="Lịch văn bản đến"
+                      date_start="ngay_den"
+                      color="do_khan"
+                      mode="month"
+                      event_open_popup="true"
+                      quick_add="false">
+                <field name="so_ky_hieu"/>
+                <field name="noi_ban_hanh"/>
+                <field name="do_khan"/>
+                <field name="trang_thai"/>
+                <field name="han_xu_ly"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_van_ban_den_calendar" model="ir.actions.act_window">
+        <field name="name">Lịch văn bản đến</field>
+        <field name="res_model">van_ban_den</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    <!-- ============================== -->
+    <!-- GRAPH: THỐNG KÊ VĂN BẢN ĐẾN  -->
+    <!-- ============================== -->
+    <record id="view_van_ban_den_graph_bar" model="ir.ui.view">
+        <field name="name">van_ban_den.graph.bar</field>
+        <field name="model">van_ban_den</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê VB đến" type="bar">
+                <field name="trang_thai"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_van_ban_den_graph_pie" model="ir.ui.view">
+        <field name="name">van_ban_den.graph.pie</field>
+        <field name="model">van_ban_den</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="VB đến theo độ khẩn" type="pie">
+                <field name="do_khan"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_van_ban_den_pivot" model="ir.ui.view">
+        <field name="name">van_ban_den.pivot</field>
+        <field name="model">van_ban_den</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích VB đến">
+                <field name="loai_van_ban_id" type="row"/>
+                <field name="trang_thai" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_van_ban_den_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích VB đến</field>
+        <field name="res_model">van_ban_den</field>
+        <field name="view_mode">graph,pivot,calendar,tree,form</field>
+    </record>
+
+    <!-- ============================== -->
+    <!-- GRAPH: THỐNG KÊ VĂN BẢN ĐI   -->
+    <!-- ============================== -->
+    <record id="view_van_ban_di_graph" model="ir.ui.view">
+        <field name="name">van_ban_di.graph</field>
+        <field name="model">van_ban_di</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê VB đi" type="bar">
+                <field name="trang_thai"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_van_ban_di_pivot" model="ir.ui.view">
+        <field name="name">van_ban_di.pivot</field>
+        <field name="model">van_ban_di</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích VB đi">
+                <field name="loai_van_ban_id" type="row"/>
+                <field name="trang_thai" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_van_ban_di_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích VB đi</field>
+        <field name="res_model">van_ban_di</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+    </record>
+
+    <!-- =============================== -->
+    <!-- CALENDAR: PHIẾU LUÂN CHUYỂN    -->
+    <!-- =============================== -->
+    <record id="view_phieu_luan_chuyen_calendar" model="ir.ui.view">
+        <field name="name">phieu_luan_chuyen.calendar</field>
+        <field name="model">phieu_luan_chuyen</field>
+        <field name="arch" type="xml">
+            <calendar string="Lịch luân chuyển"
+                      date_start="ngay_tao"
+                      color="trang_thai"
+                      mode="month"
+                      event_open_popup="true">
+                <field name="ma_phieu"/>
+                <field name="trang_thai"/>
+            </calendar>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_nghi_phep_tree" model="ir.ui.view">
+            <field name="name">nghi_phep.tree</field>
+            <field name="model">nghi_phep</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='duyet'" decoration-danger="trang_thai=='tu_choi'" decoration-info="trang_thai=='cho_duyet'">
+                    <field name="ma_don"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="don_vi_id"/>
+                    <field name="loai_nghi"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="so_ngay"/>
+                    <field name="trang_thai" widget="badge" decoration-success="trang_thai=='duyet'" decoration-danger="trang_thai=='tu_choi'" decoration-info="trang_thai=='cho_duyet'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_nghi_phep_form" model="ir.ui.view">
+            <field name="name">nghi_phep.form</field>
+            <field name="model">nghi_phep</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_gui_duyet" string="Gửi duyệt" type="object" class="btn-primary" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_duyet" string="Duyệt" type="object" class="btn-success" attrs="{'invisible': [('trang_thai', '!=', 'cho_duyet')]}"/>
+                        <button name="action_tu_choi" string="Từ chối" type="object" class="btn-danger" attrs="{'invisible': [('trang_thai', '!=', 'cho_duyet')]}"/>
+                        <button name="action_huy" string="Hủy" type="object" attrs="{'invisible': [('trang_thai', 'in', ['duyet', 'huy'])]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,cho_duyet,duyet"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ma_don"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="nhan_vien_id"/>
+                                <field name="don_vi_id"/>
+                                <field name="loai_nghi"/>
+                            </group>
+                            <group>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                                <field name="so_ngay"/>
+                                <field name="nguoi_duyet_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="ly_do"/>
+                        </group>
+                        <group attrs="{'invisible': [('trang_thai', '!=', 'tu_choi')]}">
+                            <field name="ly_do_tu_choi"/>
+                        </group>
+                        <group>
+                            <field name="file_dinh_kem" filename="file_dinh_kem_name"/>
+                            <field name="file_dinh_kem_name" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_nghi_phep_search" model="ir.ui.view">
+            <field name="name">nghi_phep.search</field>
+            <field name="model">nghi_phep</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="nhan_vien_id"/>
+                    <field name="loai_nghi"/>
+                    <filter name="cho_duyet" string="Chờ duyệt" domain="[('trang_thai','=','cho_duyet')]"/>
+                    <filter name="da_duyet" string="Đã duyệt" domain="[('trang_thai','=','duyet')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Loại nghỉ" name="group_loai" context="{'group_by': 'loai_nghi'}"/>
+                        <filter string="Phòng ban" name="group_dv" context="{'group_by': 'don_vi_id'}"/>
+                        <filter string="Tháng" name="group_thang" context="{'group_by': 'ngay_bat_dau:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_nghi_phep" model="ir.actions.act_window">
+            <field name="name">Đơn nghỉ phép</field>
+            <field name="res_model">nghi_phep</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_nghi_phep_search"/>
+        </record>
+
+        <!-- Số ngày phép -->
+        <record id="view_so_nghi_phep_tree" model="ir.ui.view">
+            <field name="name">so_nghi_phep.tree</field>
+            <field name="model">so_nghi_phep</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="nhan_vien_id"/>
+                    <field name="nam"/>
+                    <field name="tong_phep_nam"/>
+                    <field name="da_nghi"/>
+                    <field name="con_lai"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_so_nghi_phep" model="ir.actions.act_window">
+            <field name="name">Số ngày phép</field>
+            <field name="res_model">so_nghi_phep</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <!-- Sequence -->
+        <record id="seq_nghi_phep" model="ir.sequence">
+            <field name="name">Đơn nghỉ phép</field>
+            <field name="code">nghi_phep</field>
+            <field name="prefix">NP-</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

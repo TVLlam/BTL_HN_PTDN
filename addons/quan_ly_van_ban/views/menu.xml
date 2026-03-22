@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_qlvb_root"
+            name="Quản lý văn bản"
+            web_icon="quan_ly_van_ban,static/description/icon.png"
+            sequence="26"/>
+        
+        <!-- Dashboard -->
+        <menuitem id="menu_dashboard"
+            name="Dashboard"
+            parent="menu_qlvb_root"
+            action="action_qlvb_dashboard_client"
+            sequence="1"/>
+        
+        <!-- Sub Menu: Văn bản cơ bản -->
+        <menuitem id="menu_van_ban_co_ban"
+            name="Văn bản cơ bản"
+            parent="menu_qlvb_root"
+            sequence="5"/>
+        
+        <menuitem id="menu_van_ban_den"
+            name="Văn bản đến"
+            parent="menu_van_ban_co_ban"
+            action="action_van_ban_den"
+            sequence="1"/>
+        
+        <menuitem id="menu_van_ban_di"
+            name="Văn bản đi"
+            parent="menu_van_ban_co_ban"
+            action="action_van_ban_di"
+            sequence="2"/>
+        
+        <menuitem id="menu_so_cong_van"
+            name="Sổ công văn"
+            parent="menu_van_ban_co_ban"
+            action="action_so_cong_van"
+            sequence="3"/>
+        
+        <!-- Sub Menu: Luân chuyển & Lưu trữ -->
+        <menuitem id="menu_luan_chuyen_luu_tru"
+            name="Luân chuyển &amp; Lưu trữ"
+            parent="menu_qlvb_root"
+            sequence="6"/>
+        
+        <menuitem id="menu_phieu_luan_chuyen"
+            name="Phiếu luân chuyển"
+            parent="menu_luan_chuyen_luu_tru"
+            action="action_phieu_luan_chuyen"
+            sequence="1"/>
+        
+        <menuitem id="menu_luu_tru_van_ban"
+            name="Lưu trữ văn bản"
+            parent="menu_luan_chuyen_luu_tru"
+            action="action_luu_tru_van_ban"
+            sequence="2"/>
+
+        <!-- Báo cáo & Phân tích -->
+        <menuitem id="menu_bao_cao"
+            name="Thống kê"
+            parent="menu_qlvb_root"
+            sequence="35"/>
+        
+        <menuitem id="menu_vbd_analysis"
+            name="Phân tích VB đến"
+            parent="menu_bao_cao"
+            action="action_van_ban_den_analysis"
+            sequence="1"/>
+        
+        <menuitem id="menu_vbdi_analysis"
+            name="Phân tích VB đi"
+            parent="menu_bao_cao"
+            action="action_van_ban_di_analysis"
+            sequence="2"/>
+        
+        <menuitem id="menu_vbd_calendar"
+            name="Lịch VB đến"
+            parent="menu_bao_cao"
+            action="action_van_ban_den_calendar"
+            sequence="3"/>
+        
+        <!-- Sub Menu: Phê duyệt -->
+        <menuitem id="menu_phe_duyet"
+            name="Phê duyệt"
+            parent="menu_qlvb_root"
+            sequence="8"/>
+        
+        <menuitem id="menu_duyet_van_ban_den"
+            name="Duyệt văn bản đến"
+            parent="menu_phe_duyet"
+            action="action_approval_van_ban_den"
+            sequence="1"/>
+        
+        <menuitem id="menu_duyet_van_ban_di"
+            name="Duyệt văn bản đi"
+            parent="menu_phe_duyet"
+            action="action_approval_van_ban_di_clean"
+            sequence="2"/>
+        
+        <!-- Sub Menu: Quản lý kinh doanh -->
+        <menuitem id="menu_quan_ly_kinh_doanh"
+            name="Tài liệu kinh doanh"
+            parent="menu_qlvb_root"
+            sequence="10"/>
+        
+        <!-- Sub Menu: Hợp đồng -->
+        <menuitem id="menu_hop_dong"
+            name="Hợp đồng"
+            parent="menu_quan_ly_kinh_doanh"
+            action="action_hop_dong"
+            sequence="1"/>
+        
+        <!-- Sub Menu: Báo giá -->
+        <menuitem id="menu_bao_gia"
+            name="Báo giá"
+            parent="menu_quan_ly_kinh_doanh"
+            action="action_bao_gia"
+            sequence="2"/>
+        
+        
+        <!-- Sub Menu: Danh mục -->
+        <menuitem id="menu_danh_muc"
+            name="Danh mục"
+            parent="menu_qlvb_root"
+            sequence="100"/>
+        
+        <menuitem id="menu_loai_van_ban"
+            name="Loại văn bản"
+            parent="menu_danh_muc"
+            action="action_loai_van_ban"
+            sequence="1"/>
+        
+        <menuitem id="menu_mau_van_ban"
+            name="Mẫu văn bản"
+            parent="menu_danh_muc"
+            action="action_mau_van_ban"
+            sequence="2"/>
+        
+        <!-- AI Chatbot Menu -->
+        <menuitem id="menu_chatbot"
+            name="AI Trợ Lý"
+            parent="menu_qlvb_root"
+            action="action_chatbot_client"
+            sequence="200"/>
+        
+        <menuitem id="menu_chat_history"
+            name="Lịch sử chat"
+            parent="menu_qlvb_root"
+            action="action_chat_history"
+            sequence="210"/>
+
+        <menuitem id="menu_email_log"
+            name="Nhật ký email"
+            parent="menu_qlvb_root"
+            action="action_email_log"
+            sequence="220"/>
+    </data>
+</odoo>

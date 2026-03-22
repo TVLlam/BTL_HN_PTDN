@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bang_luong_tree" model="ir.ui.view">
+            <field name="name">bang_luong.tree</field>
+            <field name="model">bang_luong</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="trang_thai=='da_chi'" decoration-info="trang_thai=='xac_nhan'">
+                    <field name="ma_bang_luong"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="don_vi_id"/>
+                    <field name="thang"/>
+                    <field name="nam"/>
+                    <field name="luong_co_ban"/>
+                    <field name="tong_thu_nhap"/>
+                    <field name="tong_khau_tru"/>
+                    <field name="thuc_linh"/>
+                    <field name="trang_thai" widget="badge" decoration-success="trang_thai=='da_chi'" decoration-info="trang_thai=='xac_nhan'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_bang_luong_form" model="ir.ui.view">
+            <field name="name">bang_luong.form</field>
+            <field name="model">bang_luong</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_tinh_luong_tu_hop_dong" string="Lấy lương từ HĐLĐ" type="object" class="btn-secondary" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_xac_nhan" string="Xác nhận" type="object" class="btn-primary" attrs="{'invisible': [('trang_thai', '!=', 'nhap')]}"/>
+                        <button name="action_chi_tra" string="Chi trả" type="object" class="btn-success" attrs="{'invisible': [('trang_thai', '!=', 'xac_nhan')]}"/>
+                        <button name="action_ve_nhap" string="Về nháp" type="object" attrs="{'invisible': [('trang_thai', '!=', 'xac_nhan')]}"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,xac_nhan,da_chi"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="ma_bang_luong"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="nhan_vien_id"/>
+                                <field name="don_vi_id"/>
+                            </group>
+                            <group>
+                                <field name="thang"/>
+                                <field name="nam"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Thu nhập">
+                                <group>
+                                    <group string="Lương cơ bản">
+                                        <field name="luong_co_ban"/>
+                                        <field name="ngay_cong_chuan"/>
+                                        <field name="ngay_cong_thuc_te"/>
+                                        <field name="luong_theo_ngay_cong"/>
+                                    </group>
+                                    <group string="Phụ cấp &amp; Thưởng">
+                                        <field name="phu_cap_an"/>
+                                        <field name="phu_cap_di_lai"/>
+                                        <field name="phu_cap_khac"/>
+                                        <field name="thuong"/>
+                                        <field name="lam_them"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="tong_thu_nhap" class="oe_inline"/>
+                                </group>
+                            </page>
+                            <page string="Khấu trừ">
+                                <group>
+                                    <group string="Bảo hiểm (NLĐ đóng)">
+                                        <field name="bhxh_nld"/>
+                                        <field name="bhyt_nld"/>
+                                        <field name="bhtn_nld"/>
+                                        <field name="tong_bao_hiem_nld"/>
+                                    </group>
+                                    <group string="Thuế TNCN">
+                                        <field name="giam_tru_ban_than"/>
+                                        <field name="so_nguoi_phu_thuoc"/>
+                                        <field name="giam_tru_phu_thuoc"/>
+                                        <field name="thu_nhap_chiu_thue"/>
+                                        <field name="thue_tncn"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="khau_tru_khac"/>
+                                    <field name="tong_khau_tru"/>
+                                </group>
+                            </page>
+                            <page string="Thực lĩnh">
+                                <group>
+                                    <div style="font-size: 24px; font-weight: bold; color: #28a745; padding: 20px;">
+                                        THỰC LĨNH: <field name="thuc_linh" class="oe_inline"/> VNĐ
+                                    </div>
+                                </group>
+                            </page>
+                        </notebook>
+                        <group>
+                            <field name="ghi_chu"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_bang_luong_search" model="ir.ui.view">
+            <field name="name">bang_luong.search</field>
+            <field name="model">bang_luong</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="nhan_vien_id"/>
+                    <field name="thang"/>
+                    <field name="nam"/>
+                    <filter name="nhap" string="Nháp" domain="[('trang_thai','=','nhap')]"/>
+                    <filter name="xac_nhan" string="Đã xác nhận" domain="[('trang_thai','=','xac_nhan')]"/>
+                    <filter name="da_chi" string="Đã chi trả" domain="[('trang_thai','=','da_chi')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Nhân viên" name="group_nv" context="{'group_by': 'nhan_vien_id'}"/>
+                        <filter string="Phòng ban" name="group_dv" context="{'group_by': 'don_vi_id'}"/>
+                        <filter string="Tháng" name="group_thang" context="{'group_by': 'thang'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_bang_luong" model="ir.actions.act_window">
+            <field name="name">Bảng lương</field>
+            <field name="res_model">bang_luong</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bang_luong_search"/>
+        </record>
+
+        <!-- Sequence -->
+        <record id="seq_bang_luong" model="ir.sequence">
+            <field name="name">Bảng lương</field>
+            <field name="code">bang_luong</field>
+            <field name="prefix">BL-</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>
