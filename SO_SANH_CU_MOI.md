@@ -1,240 +1,196 @@
-# 📊 SO SÁNH PHIÊN BẢN: CŨ ↔ MỚI
+# SO SÁNH PHIÊN BẢN CŨ → MỚI — ERP: Quản lý Nhân sự – Khách hàng – Văn bản
 
-> **Dự án**: ERP Quản lý Nhân sự – Khách hàng – Văn bản  
-> **Nền tảng**: Odoo 15.0 · Python 3.10 · PostgreSQL  
-> **Ngày cập nhật**: 22/03/2026
-
----
-
-## 1. Tổng quan thay đổi
-
-| Tiêu chí | Phiên bản cũ (v1.0) | Phiên bản mới (v2.0) | Thay đổi |
-|----------|---------------------|---------------------|----------|
-| **Tổng số model** | ~30 model | ~56 model | **+26 model mới** |
-| **Tổng số file Python** | ~35 files | ~56 files | **+21 files** |
-| **Tổng số XML views** | ~40 files | ~66 files | **+26 files** |
-| **Module phụ thuộc** | `base`, `web`, `mail` | + `email_service`, `res_config_settings` | **+2 service** |
-| **AI/LLM** | GPT-4o mini + Gemini (SDK) | Gemini 2.5 Flash (REST API) | **Đổi engine** |
-| **Email** | Hardcode Gmail trong code | Dịch vụ tập trung + .env + UI Settings | **Chuẩn hóa** |
-| **Báo cáo nâng cao** | Dashboard, Kanban, Graph cơ bản | + Calendar, Pivot, Graph nâng cao | **+3 loại view** |
-| **Bảo mật** | Mật khẩu Gmail hardcode trong source | Đọc từ .env / ir.config_parameter | **Sửa lỗ hổng** |
+> **Nhóm**: CNTT17-07 — Nhóm 4  
+> **Nền tảng**: Odoo 15.0 Community · Python 3.10 · PostgreSQL 10  
+> **Cập nhật**: 25/03/2026
 
 ---
 
-## 2. So sánh chi tiết theo Module
+## 1. Tổng quan kiến trúc
 
-### 2.1 Module `nhan_su` (HRM — Quản lý nhân sự)
-
-#### Models
-
-| Model | v1.0 (Cũ) | v2.0 (Mới) | Ghi chú |
-|-------|-----------|-----------|---------|
-| `nhan_vien` | ✅ ~15 trường cơ bản | ✅ **50+ trường** (CCCD, địa chỉ, trình độ, hôn nhân, ngân hàng, MST...) | Mở rộng lớn |
-| `don_vi` | ✅ Có | ✅ Giữ nguyên | — |
-| `chuc_vu` | ✅ Có | ✅ Giữ nguyên | — |
-| `lich_su_cong_tac` | ✅ Có | ✅ Giữ nguyên | — |
-| `chung_chi_bang_cap` | ✅ Có | ✅ Giữ nguyên | — |
-| `hop_dong_lao_dong` | ❌ Không có | ✅ **MỚI**: 4 loại HĐ, lương+phụ cấp, workflow 5 TT, cron tự động | **+1 model** |
-| `nghi_phep` + `so_nghi_phep` | ❌ Không có | ✅ **MỚI**: 6 loại phép, workflow duyệt, cân đối phép năm, **email thông báo** | **+2 model** |
-| `bang_luong` | ❌ Không có | ✅ **MỚI**: BHXH/BHYT/BHTN, thuế TNCN 7 bậc, giảm trừ gia cảnh, **email chi trả** | **+1 model** |
-| `danh_gia_kpi` | ❌ Không có | ✅ **MỚI**: 5 tiêu chí (1–5), tự phân loại, kỳ tháng/quý/năm | **+1 model** |
-| `dao_tao` | ❌ Không có | ✅ **MỚI**: 4 hình thức, chi phí, danh sách NV tham gia | **+1 model** |
-| `email_service` | ❌ Không có | ✅ **MỚI**: Dịch vụ email Gmail tập trung (AbstractModel) | **+1 service** |
-| `res_config_settings` | ❌ Không có | ✅ **MỚI**: Cấu hình Gmail từ giao diện Odoo Settings | **+1 model** |
-
-#### Views
-
-| View | v1.0 | v2.0 | Ghi chú |
-|------|------|------|---------|
-| Form nhân viên | Đơn giản, ít tab | Avatar + header, 2 cột, 6 tab notebook, smart buttons | **Thiết kế lại** |
-| Smart buttons | ❌ | ✅ 3 nút: Hợp đồng, Nghỉ phép, KPI | **Mới** |
-| Calendar (nghỉ phép) | ❌ | ✅ Lịch nghỉ phép theo màu loại nghỉ | **Mới** |
-| Calendar (đào tạo) | ❌ | ✅ Lịch đào tạo theo chương trình | **Mới** |
-| Pivot (bảng lương) | ❌ | ✅ Phân tích lương theo đơn vị × tháng | **Mới** |
-| Pivot (KPI) | ❌ | ✅ Phân tích KPI theo đơn vị × kỳ | **Mới** |
-| Graph (lương) | ❌ | ✅ Biểu đồ cột thu nhập/thực lĩnh | **Mới** |
-| Graph (KPI) | ❌ | ✅ Biểu đồ cột điểm trung bình | **Mới** |
-| Settings email | ❌ | ✅ Giao diện cấu hình Gmail trong Cài đặt | **Mới** |
-| Dashboard | ✅ Có | ✅ Giữ nguyên | — |
-
-#### Workflow & Automation
-
-| Tính năng | v1.0 | v2.0 |
-|-----------|------|------|
-| Sequence tự sinh mã | ❌ | ✅ HDLD-XXXX, NP-XXXX, BL-XXXX, KPI-XXXX, DT-XXXX |
-| Cron job HĐLĐ hết hạn | ❌ | ✅ Tự động cập nhật trạng thái hàng ngày |
-| Email duyệt nghỉ phép | ❌ | ✅ Gửi email tự động khi duyệt/từ chối |
-| Email chi trả lương | ❌ | ✅ Gửi email chi tiết lương cho nhân viên |
-| Sync res.partner | ❌ | ✅ Đồng bộ nhân viên ↔ res.partner |
+| Tiêu chí | Phiên bản cũ | Phiên bản mới (hiện tại) |
+|---|---|---|
+| **Cấu trúc module** | 1 addon tổng hợp, code lẫn lộn | **3 addon độc lập**: `nhan_su`, `quan_ly_khach_hang`, `quan_ly_van_ban` |
+| **Phụ thuộc** | Không phân tầng rõ | `nhan_su` → `quan_ly_khach_hang` → `quan_ly_van_ban` (phân tầng rõ ràng) |
+| **Email** | Mỗi module tự gửi riêng | **Email service tập trung** tại `nhan_su/models/email_service.py`, dùng chung |
+| **AI / Chatbot** | Không có | **Chatbot Gemini 2.5 Flash** tích hợp vào module văn bản |
+| **Frontend** | XML view cơ bản | OWL JS + Chart.js + Dashboard widget tùy chỉnh |
+| **Database** | SQLite / PostgreSQL đơn giản | PostgreSQL 10 (Docker), port 5431 |
 
 ---
 
-### 2.2 Module `quan_ly_khach_hang` (CRM — Khách hàng & Bán hàng)
+## 2. Module Nhân sự (`nhan_su`)
 
-#### Models
+### 2.1 Model & dữ liệu
 
-| Model | v1.0 (Cũ) | v2.0 (Mới) | Ghi chú |
-|-------|-----------|-----------|---------|
-| `khach_hang` | ✅ Có | ✅ Giữ nguyên + sync partner | — |
-| `co_hoi_ban_hang` | ✅ Pipeline 6 giai đoạn | ✅ Giữ nguyên + **email thắng/thua** | Thêm email |
-| `bao_gia` | ✅ Có | ✅ Giữ nguyên | — |
-| `hop_dong` | ✅ Có | ✅ Giữ nguyên | — |
-| `don_hang` | ✅ Có | ✅ Giữ nguyên + **email xác nhận/hoàn thành** | Thêm email |
-| `giao_hang` | ✅ Có | ✅ Giữ nguyên | — |
-| `hoa_don` | ✅ Có | ✅ Giữ nguyên | — |
-| `thanh_toan` | ✅ Có | ✅ Giữ nguyên | — |
-| `cong_no_khach_hang` | ✅ Có | ✅ Giữ nguyên | — |
-| `loyalty_program` | ✅ Có | ✅ Giữ nguyên | — |
-| `khieu_nai_phan_hoi` | ✅ Có | ✅ Giữ nguyên | — |
-| `tuong_tac_khach_hang` | ✅ Có | ✅ Giữ nguyên | — |
-| `khao_sat_hai_long` | ❌ Không có | ✅ **MỚI**: CSAT (5 tiêu chí) / NPS (0–10) / CES | **+1 model** |
-| `chien_dich_marketing` | ❌ Không có | ✅ **MỚI**: 7 loại chiến dịch, lọc KH tự động, KPI: ROI, tỷ lệ phản hồi | **+1 model** |
-| `cham_diem_lead` | ❌ Không có | ✅ **MỚI**: Scoring 0–100 (5 yếu tố), Hot/Warm/Cold/Frozen, cron job | **+1 model** |
+| Model | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| `nhan_vien` | ~10 trường cơ bản | **50+ trường**: CCCD, trình độ, ngân hàng, trạng thái làm việc, ảnh |
+| `don_vi` | Tên đơn vị đơn giản | Cấp độ phân cấp, mã đơn vị |
+| `chuc_vu` | Tên chức vụ | Cấp độ chức vụ, mã chức vụ |
+| `hop_dong_lao_dong` | Chỉ lưu lương cơ bản | 4 loại HĐ, phụ cấp, compute `tong_thu_nhap`, workflow 3 trạng thái, cron tự động |
+| `nghi_phep` | Chỉ ghi nhận ngày | **7 loại nghỉ**, workflow 5 trạng thái, số ngày tự tính, **email thông báo** |
+| `bang_luong` | Nhập tay | BHXH/BHYT/BHTN tự tính, **thuế TNCN 7 bậc**, giảm trừ gia cảnh, **email chi trả** |
+| `danh_gia_kpi` | Không có | **5 tiêu chí** (1–5), tự phân loại 5 mức, kỳ tháng/quý/năm |
+| `dao_tao` | Không có | 4 hình thức, chi phí, danh sách NV, Calendar view |
+| `lich_su_cong_tac` | Không có | Lịch sử điều động, thuyên chuyển toàn bộ |
+| `chung_chi_bang_cap` | Không có | Quản lý chứng chỉ, bằng cấp kèm file scan |
+| `email_service` | Không có | **Dịch vụ email Gmail SMTP tập trung** cho toàn hệ thống |
+| `dashboard` | Không có | **Dashboard OWL** thống kê tổng số NV, trạng thái, biểu đồ Chart.js |
 
-#### Views
+### 2.2 Views
 
-| View | v1.0 | v2.0 | Ghi chú |
-|------|------|------|---------|
-| Graph đơn hàng (bar) | ❌ | ✅ Doanh thu theo trạng thái | **Mới** |
-| Graph đơn hàng (line) | ❌ | ✅ Xu hướng đơn hàng theo tháng | **Mới** |
-| Graph cơ hội (bar) | ❌ | ✅ Giá trị theo giai đoạn pipeline | **Mới** |
-| Graph thanh toán (pie) | ❌ | ✅ Thống kê theo hình thức thanh toán | **Mới** |
-| Pivot đơn hàng | ❌ | ✅ KH × trạng thái × giá trị | **Mới** |
-| Pivot cơ hội | ❌ | ✅ NV phụ trách × giai đoạn × giá trị | **Mới** |
-| Pivot tương tác | ❌ | ✅ Loại tương tác × nhân viên | **Mới** |
-| Dashboard | ✅ Có | ✅ Giữ nguyên | — |
-| Kanban cơ hội | ✅ Có | ✅ Giữ nguyên | — |
-
-#### Workflow & Automation
-
-| Tính năng | v1.0 | v2.0 |
-|-----------|------|------|
-| Email xác nhận đơn hàng | ❌ | ✅ Gửi cho KH khi đơn được xác nhận |
-| Email hoàn thành đơn hàng | ✅ Có (mail.mail) | ✅ Giữ nguyên + thêm email từ service |
-| Email thắng/thua cơ hội | ❌ | ✅ Gửi cho NV phụ trách |
-| Cron scoring lead | ✅ Có | ✅ Giữ nguyên |
-| Auto-create đơn hàng khi thắng | ✅ Có | ✅ Giữ nguyên |
-| Tự động tạo VB từ cơ hội | ✅ Có | ✅ Giữ nguyên |
+| View | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Form | Đơn giản, ít tab | Multi-tab, tab ngân hàng, tab hồ sơ |
+| Tree | Cơ bản | Có màu trạng thái, widget badge |
+| Kanban | Không có | Card với ảnh, phòng ban, chức vụ |
+| Graph | Không có | Biểu đồ lương, KPI theo phòng ban |
+| Calendar | Không có | Calendar cho nghỉ phép, đào tạo |
+| Pivot | Không có | Pivot cho lương, KPI |
+| Dashboard | Không có | Custom OWL widget |
 
 ---
 
-### 2.3 Module `quan_ly_van_ban` (QLVB — Quản lý văn bản)
+## 3. Module CRM / Khách hàng (`quan_ly_khach_hang`)
 
-#### Models
+### 3.1 Model & dữ liệu
 
-| Model | v1.0 (Cũ) | v2.0 (Mới) | Ghi chú |
-|-------|-----------|-----------|---------|
-| `van_ban_den` | ✅ Có | ✅ + **email phân công người xử lý** | Thêm email |
-| `van_ban_di` | ✅ Có | ✅ **Sửa**: bỏ hardcode Gmail, dùng email service | **Fix bảo mật** |
-| `loai_van_ban` | ✅ Có | ✅ Giữ nguyên | — |
-| `luong_duyet` + `buoc_duyet` + `lich_su_duyet` | ✅ Có | ✅ Giữ nguyên | — |
-| `chu_ky_dien_tu` | ✅ Có | ✅ Giữ nguyên | — |
-| `mau_van_ban` | ✅ Có | ✅ Giữ nguyên | — |
-| `lich_su_phien_ban` | ✅ Có | ✅ Giữ nguyên | — |
-| `tai_lieu` | ✅ Có | ✅ Giữ nguyên | — |
-| `chatbot_service` | ✅ GPT-4o mini + Gemini (SDK) | ✅ **Đổi**: chỉ Gemini 2.5 Flash (REST API), bỏ OpenAI | **Refactor lớn** |
-| `so_cong_van` | ❌ Không có | ✅ **MỚI**: Sổ đến/đi theo năm + đơn vị, mở/khóa | **+1 model** |
-| `phieu_luan_chuyen` + `chi_tiet` | ❌ Không có | ✅ **MỚI**: Luân chuyển VB qua bộ phận, lộ trình từng bước | **+2 model** |
-| `luu_tru_van_ban` | ❌ Không có | ✅ **MỚI**: Lưu trữ vật lý, thời hạn, thu hồi, đề xuất hủy, cron cảnh báo | **+1 model** |
-| `email_log` | ✅ Có | ✅ Giữ nguyên | — |
+| Model | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| `khach_hang` | Thông tin cơ bản | Cá nhân/doanh nghiệp, phân tầng (Đồng→Kim cương), mã tự sinh |
+| `co_hoi_ban_hang` | Không có | Pipeline **6 giai đoạn**, ty lệ thành công, giá trị dự kiến, **email thắng/thua** |
+| `bao_gia` | Không có | Báo giá chi tiết, workflow KH đồng ý/từ chối, liên kết cơ hội |
+| `hop_dong` | Lưu trữ đơn giản | Workflow duyệt, **chữ ký điện tử** (upload + hash), liên kết VB |
+| `don_hang` + `don_hang_chi_tiet` | Không có | Đơn hàng với sản phẩm/dịch vụ, **email xác nhận/hoàn thành** |
+| `giao_hang` | Không có | Phiếu giao hàng, wizard xác nhận |
+| `hoa_don` | Không có | Hóa đơn bán hàng liên kết đơn hàng |
+| `thanh_toan` | Không có | Đa hình thức thanh toán, **email xác nhận** |
+| `cong_no_khach_hang` | Không có | Dashboard công nợ, theo dõi dư nợ |
+| `co_hoi_ban_hang` | Không có | Lead scoring 0–100, phân loại Hot/Warm/Cold/Frozen |
+| `chien_dich_marketing` | Không có | 7 loại chiến dịch, lọc KH, KPI ROI |
+| `khao_sat_hai_long` | Không có | CSAT/NPS/CES |
+| `loyalty_program` | Không có | Chương trình thân thiết, tích điểm |
+| `khieu_nai_phan_hoi` | Không có | Khiếu nại, SLA, mức ưu tiên |
 
-#### Views
+### 3.2 Tích hợp
 
-| View | v1.0 | v2.0 | Ghi chú |
-|------|------|------|---------|
-| Calendar VB đến | ❌ | ✅ Theo ngày đến, màu theo độ khẩn | **Mới** |
-| Calendar luân chuyển | ❌ | ✅ Theo ngày tạo phiếu | **Mới** |
-| Graph VB đến (bar) | ❌ | ✅ Thống kê theo trạng thái | **Mới** |
-| Graph VB đến (pie) | ❌ | ✅ Phân bổ theo độ khẩn | **Mới** |
-| Graph VB đi (bar) | ❌ | ✅ Thống kê theo trạng thái | **Mới** |
-| Pivot VB đến | ❌ | ✅ Loại VB × trạng thái | **Mới** |
-| Pivot VB đi | ❌ | ✅ Loại VB × trạng thái | **Mới** |
-| Dashboard | ✅ Có | ✅ Giữ nguyên | — |
-
-#### Chatbot AI — Thay đổi lớn
-
-| Tiêu chí | v1.0 | v2.0 |
-|----------|------|------|
-| **AI Provider** | OpenAI (GPT-4o mini) + Google Gemini | **Chỉ Google Gemini** |
-| **Model AI** | gpt-4o-mini / gemini-pro | **gemini-2.5-flash** |
-| **Cách gọi API** | OpenAI SDK + Google Generative AI SDK | **REST API thuần** (urllib.request) |
-| **Dependency** | `openai`, `google-generativeai` | **Không cần SDK** (chỉ urllib) |
-| **API endpoint** | Qua SDK | `generativelanguage.googleapis.com/v1beta/models/` |
-| **Dropdown model** | 2 lựa chọn (GPT + Gemini) | 1 lựa chọn: Gemini 2.5 Flash |
-| **Error handling** | Cơ bản | Xử lý 429/400/403/404 chi tiết |
+| Luồng | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Cơ hội → Báo giá | Thủ công | Nút "Tạo báo giá" trực tiếp từ cơ hội |
+| Báo giá → Hợp đồng | Thủ công | Nút "Tạo hợp đồng" từ báo giá đã được duyệt |
+| Hợp đồng → Văn bản | Không có | **Tự động tạo VBĐi** trong `quan_ly_van_ban` khi lưu hợp đồng |
+| Đơn hàng → Giao hàng → Hóa đơn | Không có | Chuỗi tự động, mỗi bước cập nhật trạng thái |
 
 ---
 
-## 3. Sửa lỗi bảo mật
+## 4. Module Văn bản (`quan_ly_van_ban`)
 
-| Vấn đề | v1.0 | v2.0 |
-|--------|------|------|
-| **Mật khẩu Gmail hardcode** | `sender_password = "xcnq ndxs iqxb tjws"` nằm trực tiếp trong `van_ban_di.py` | ✅ Đọc từ `.env` hoặc Odoo Settings. File `.env` được `.gitignore` |
-| **API Key lộ trong code** | Có thể lộ qua git history | ✅ Tất cả key trong `.env` (gitignored) |
-| **Gửi email phân tán** | Mỗi model tự xử lý SMTP | ✅ Dịch vụ tập trung `email.notification.service` |
+### 4.1 Model & dữ liệu
 
----
+| Model | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| `van_ban_den` | Lưu trữ đơn giản | **5 trạng thái**, độ khẩn/độ mật, hạn xử lý, cron quá hạn, **email phân công** |
+| `van_ban_di` | Tạo và lưu | Luồng duyệt, ký số, tự động tạo từ CRM, **email thông báo** |
+| `loai_van_ban` | Không có | Danh mục loại, mã loại |
+| `luong_duyet` + `buoc_duyet` | Không có | **Phê duyệt đa cấp** theo cấu hình, lịch sử từng bước |
+| `chu_ky_dien_tu` | Không có | Upload file ký + **hash SHA256**, audit trail |
+| `so_cong_van` | Không có | Sổ theo dõi VB đến/đi theo năm, mở/khóa sổ |
+| `phieu_luan_chuyen` | Không có | Luân chuyển VB qua nhiều bộ phận, ghi nhận từng bước |
+| `luu_tru_van_ban` | Không có | Lưu trữ vật lý (tủ/kệ/ngăn), thời hạn, thu hồi, đề xuất hủy |
+| `chatbot_service` | Không có | **Chatbot AI Gemini 2.5 Flash** — tra cứu, hỏi đáp nghiệp vụ |
+| `mau_van_ban` | Không có | Mẫu văn bản Jinja2, sinh VB từ mẫu |
+| `lich_su_phien_ban` | Không có | Quản lý phiên bản tài liệu, diff |
+| `email_log` | Không có | Nhật ký email tự động toàn hệ thống |
 
-## 4. Email thông báo — Tính năng mới hoàn toàn
+### 4.2 Frontend (JS/OWL)
 
-| Sự kiện | Module | Email gửi cho | v1.0 | v2.0 |
-|---------|--------|---------------|------|------|
-| Duyệt nghỉ phép | HRM | Nhân viên | ❌ | ✅ |
-| Từ chối nghỉ phép | HRM | Nhân viên | ❌ | ✅ |
-| Chi trả lương | HRM | Nhân viên (chi tiết lương) | ❌ | ✅ |
-| Xác nhận đơn hàng | CRM | Khách hàng | ❌ | ✅ |
-| Hoàn thành đơn hàng | CRM | Khách hàng | ✅ (mail.mail) | ✅ (+ email service) |
-| Cơ hội Thắng/Thua | CRM | NV phụ trách | ❌ | ✅ |
-| Phân công VB đến | QLVB | Người xử lý | ❌ | ✅ |
-| Phê duyệt VB đi | QLVB | Khách hàng | ✅ (hardcode Gmail) | ✅ (email service) |
-
----
-
-## 5. Báo cáo nâng cao — Tính năng mới
-
-| Loại view | Module | Nội dung | v1.0 | v2.0 |
-|-----------|--------|----------|------|------|
-| **Calendar** | HRM | Lịch nghỉ phép | ❌ | ✅ |
-| **Calendar** | HRM | Lịch đào tạo | ❌ | ✅ |
-| **Calendar** | QLVB | Lịch VB đến | ❌ | ✅ |
-| **Calendar** | QLVB | Lịch luân chuyển | ❌ | ✅ |
-| **Pivot** | HRM | Phân tích lương (đơn vị × tháng) | ❌ | ✅ |
-| **Pivot** | HRM | Phân tích KPI (đơn vị × kỳ) | ❌ | ✅ |
-| **Pivot** | CRM | Đơn hàng (KH × TT × giá trị) | ❌ | ✅ |
-| **Pivot** | CRM | Pipeline (NV × giai đoạn × giá trị) | ❌ | ✅ |
-| **Pivot** | CRM | Tương tác (loại × NV) | ❌ | ✅ |
-| **Pivot** | QLVB | VB đến/đi (loại × trạng thái) | ❌ | ✅ |
-| **Graph** | HRM | Biểu đồ lương, KPI | ❌ | ✅ |
-| **Graph** | CRM | Đơn hàng (bar+line), cơ hội (bar), thanh toán (pie) | ❌ | ✅ |
-| **Graph** | QLVB | VB đến (bar+pie), VB đi (bar) | ❌ | ✅ |
+| Tính năng | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Chatbot UI | Không có | **OWL Widget** — dialog chat floating, lịch sử hội thoại |
+| Dashboard | Không có | **Custom OWL Dashboard** — số liệu thời gian thực, Chart.js |
+| Upload chữ ký | Không có | Wizard upload với preview + xác nhận hash |
 
 ---
 
-## 6. Thống kê tổng hợp
+## 5. Tính năng bảo mật
 
-| Hạng mục | Cũ (v1.0) | Mới (v2.0) | Thêm mới |
-|----------|-----------|-----------|----------|
-| Model HRM | 7 | 14 | **+7** |
-| Model CRM | 16 | 19 | **+3** |
-| Model QLVB | 18 | 22 | **+4** |
-| **Tổng model** | **~41** | **~55** | **+14** |
-| View XML tổng | ~40 | ~66 | **+26** |
-| Email tự động | 1 (hardcode) | 8 (dịch vụ tập trung) | **+7** |
-| Calendar view | 0 | 4 | **+4** |
-| Pivot view | 0 | 8 | **+8** |
-| Graph view nâng cao | 0 | 9 | **+9** |
-| AI Engine | 2 (OpenAI + Gemini SDK) | 1 (Gemini REST API) | Tinh gọn |
-| Bảo mật .env | ❌ | ✅ | Fix |
+| Tiêu chí | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Phân quyền model | Mặc định Odoo | **ACL chi tiết** cho từng model (ir.model.access.csv) |
+| Chữ ký điện tử | Không có | Hash SHA256 cho file ký, audit trail |
+| API key | Hardcode | Đọc từ **biến môi trường** `.env` (`GEMINI_API_KEY`, `GMAIL_APP_PASSWORD`) |
+| Email password | Không có | App Password Gmail thay vì mật khẩu thật |
 
 ---
 
-## 7. Công nghệ mới sử dụng
+## 6. Hiệu năng & vận hành
 
-| Công nghệ | Mục đích | v1.0 | v2.0 |
-|-----------|----------|------|------|
-| Gemini 2.5 Flash REST API | Chatbot AI | ❌ (dùng SDK) | ✅ urllib.request thuần |
-| Gmail SMTP Service | Email thông báo tập trung | ❌ (hardcode) | ✅ AbstractModel |
-| .env configuration | Bảo mật API keys | ❌ | ✅ |
-| Odoo Settings UI | Cấu hình email từ giao diện | ❌ | ✅ res.config.settings |
-| Calendar View | Lịch trực quan | ❌ | ✅ 4 calendar views |
-| Pivot View | Phân tích đa chiều | ❌ | ✅ 8 pivot views |
+| Tiêu chí | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Computed fields | Hầu hết tính realtime | `store=True` cho các field tính toán phức tạp (tong_thu_nhap, so_ngay) |
+| Cron jobs | Không có | Cron tự động: hết hạn HĐ, quá hạn VBĐ |
+| Sequences | Mã thủ công | `ir.sequence` tự sinh mã có prefix (NP/, CH/, VBD/...) |
+| Docker | Không có | Docker Compose — PostgreSQL không phụ thuộc hệ thống cục bộ |
+| Logging | Không có | Email log tập trung, tracking=True trên các field quan trọng |
+
+---
+
+## 7. So sánh luồng nghiệp vụ end-to-end
+
+### Luồng Nhân sự
+
+```
+CŨ:  Tạo NV → Lưu (chỉ lưu thông tin)
+
+MỚI: Tạo NV → Gán Phòng ban/Chức vụ
+         → Tạo HĐLĐ (Draft → Hiệu lực, cron tự hết hạn)
+         → Xin nghỉ phép (Nháp → Chờ duyệt → Duyệt + EMAIL)
+         → Bảng lương (BHXH/BHYT/thuế TNCN 7 bậc → Chi trả + EMAIL)
+         → KPI (5 tiêu chí → tự xếp loại)
+         → Dashboard tổng hợp
+```
+
+### Luồng CRM bán hàng
+
+```
+CŨ:  Tạo KH → Lưu hợp đồng (thủ công)
+
+MỚI: Tạo KH → Tạo Cơ hội → Pipeline 6 giai đoạn
+         → Báo giá (chi tiết SP/DV) → KH đồng ý
+         → Hợp đồng → Ký điện tử
+         → Đơn hàng → Xác nhận (EMAIL KH) → Giao hàng
+         → Hóa đơn → Thanh toán (EMAIL KH) → Công nợ
+         → Lead scoring → Marketing → Khảo sát CSAT
+         → VBĐi tự sinh trong module Văn bản (liên module)
+```
+
+### Luồng Văn bản
+
+```
+CŨ:  Tạo VB → Lưu (không có workflow)
+
+MỚI: VBĐến: Nhận → Phân công (EMAIL) → Xử lý → Đã xử lý
+                 (cron tự chuyển "Quá hạn" nếu trễ)
+         → Luân chuyển đa bộ phận → Lưu trữ vật lý
+
+     VBĐi: Soạn thảo → Luồng duyệt đa cấp → Ký điện tử (hash PKI)
+               → Phát hành (EMAIL KH) → Lưu sổ công văn
+
+     Chatbot: Hỏi đáp nghiệp vụ (Gemini AI) → Lịch sử chat
+```
+
+---
+
+## 8. Thống kê kỹ thuật
+
+| Chỉ số | Phiên bản cũ | Phiên bản mới |
+|---|---|---|
+| Số model tùy chỉnh | ~5 model | **51 model** (15 + 19 + 22 - phần dùng chung) |
+| Số view XML | ~10 file | **57 file view XML** (17 + 25 + 25 - menu) |
+| JS/OWL frontend | Không có | **6 file JS**, 3 file CSS, 4 file XML template |
+| Email workflow | 0 sự kiện | **7 sự kiện tự động gửi email** |
+| AI integration | Không có | Gemini 2.5 Flash REST API |
+| Cron jobs | 0 | **2+ cron jobs**: hết hạn HĐ, quá hạn VBĐ |
+| Sequences tự sinh | 0 | **6+ sequence**: NV, NP, BL, CH, VBD, VBDi |
+| Docker service | Không có | PostgreSQL 10-alpine, port 5431 |

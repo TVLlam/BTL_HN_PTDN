@@ -66,9 +66,16 @@ class EmailNotificationService(models.AbstractModel):
             msg["To"] = to_email
             msg.attach(MIMEText(body_html, "html", "utf-8"))
 
-            with smtplib.SMTP("smtp.gmail.com", 587, timeout=15) as server:
-                server.starttls()
-                server.login(sender_email, sender_password)
+            env_vars = _load_env()
+            smtp_host = os.environ.get('SMTP_HOST') or env_vars.get('SMTP_HOST') or 'smtp.gmail.com'
+            smtp_port = int(os.environ.get('SMTP_PORT') or env_vars.get('SMTP_PORT') or 587)
+            use_tls = smtp_host != 'localhost'
+
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=15) as server:
+                if use_tls:
+                    server.starttls()
+                if sender_password:
+                    server.login(sender_email, sender_password)
                 server.sendmail(sender_email, to_email, msg.as_string())
 
             _logger.info("Email sent to %s: %s", to_email, subject)

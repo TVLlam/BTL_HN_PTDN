@@ -4,365 +4,387 @@
     </a>
 </h2>
 <h2 align="center">
-    ERP: HỆ THỐNG QUẢN LÝ KHÁCH HÀNG & VĂN BẢN
+    ERP: HỆ THỐNG QUẢN LÝ NHÂN SỰ – KHÁCH HÀNG – VĂN BẢN
 </h2>
 <div align="center">
     <p align="center">
         <img src="docs/logo/aiotlab_logo.png" alt="AIoTLab Logo" width="170"/>
-        <img src="docs/logo/fitdnu_logo.png" alt="AIoTLab Logo" width="180"/>
+        <img src="docs/logo/fitdnu_logo.png" alt="FIT DNU Logo" width="180"/>
         <img src="docs/logo/dnu_logo.png" alt="DaiNam University Logo" width="200"/>
     </p>
 
 [![AIoTLab](https://img.shields.io/badge/AIoTLab-green?style=for-the-badge)](https://www.facebook.com/DNUAIoTLab)
-[![Faculty of Information Technology](https://img.shields.io/badge/Faculty%20of%20Information%20Technology-blue?style=for-the-badge)](https://dainam.edu.vn/vi/khoa-cong-nghe-thong-tin)
+[![Faculty of IT](https://img.shields.io/badge/Faculty%20of%20IT-blue?style=for-the-badge)](https://dainam.edu.vn/vi/khoa-cong-nghe-thong-tin)
 [![DaiNam University](https://img.shields.io/badge/DaiNam%20University-orange?style=for-the-badge)](https://dainam.edu.vn)
+[![Odoo 15](https://img.shields.io/badge/Odoo-15.0-714B67?style=for-the-badge&logo=odoo&logoColor=white)](https://www.odoo.com/)
+[![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 </div>
+
+---
 
 ## 📖 1. Giới thiệu
-**ERP: HỆ THỐNG QUẢN LÝ KHÁCH HÀNG & VĂN BẢN** là hệ thống quản trị doanh nghiệp được xây dựng trên nền tảng **Odoo (mã nguồn mở)**, phục vụ học phần *Thực tập doanh nghiệp* của Khoa Công nghệ Thông tin – Trường Đại học Đại Nam. Hệ thống được thiết kế theo mô hình ERP tích hợp, tập trung vào ba phân hệ nghiệp vụ chính: **Nhân sự – Khách hàng – Văn bản**, hướng tới mục tiêu số hóa quy trình và quản lý dữ liệu tập trung.
 
-### Các chức năng chính của hệ thống
+**ERP: Hệ thống quản lý Nhân sự – Khách hàng – Văn bản** là hệ thống quản trị doanh nghiệp được xây dựng trên nền tảng **Odoo 15.0 (mã nguồn mở)**, phục vụ học phần *Thực tập doanh nghiệp* — Khoa CNTT, Trường Đại học Đại Nam.
 
-* **Quản lý nhân sự (HRM)**
-  Quản lý hồ sơ nhân viên, cơ cấu tổ chức, chức vụ, lịch sử công tác và chứng chỉ/bằng cấp; cung cấp dữ liệu nhân sự làm **master data** để gán người phụ trách, người xử lý và người phê duyệt trong toàn hệ thống.
+Hệ thống gồm **3 module chính** tích hợp chặt chẽ:
 
-* **Quản lý khách hàng và bán hàng (Customer/CRM)**
-  Quản lý khách hàng cá nhân/doanh nghiệp; theo dõi vòng đời bán hàng từ cơ hội → báo giá → hợp đồng → đơn hàng → giao hàng → hóa đơn → thanh toán; quản lý công nợ, lịch sử tương tác, khiếu nại và chương trình khách hàng thân thiết.
+| Module | Mô tả |
+|--------|-------|
+| **`nhan_su`** (HRM) | Quản lý nhân viên, phòng ban, hợp đồng LĐ, nghỉ phép, bảng lương, KPI, đào tạo |
+| **`quan_ly_khach_hang`** (CRM) | Pipeline bán hàng end-to-end: khách hàng → cơ hội → báo giá → hợp đồng → đơn hàng → giao hàng → hóa đơn → thanh toán |
+| **`quan_ly_van_ban`** (QLVB) | Văn bản đến/đi, phê duyệt đa cấp, ký số, OCR, chatbot AI, sổ công văn, luân chuyển, lưu trữ |
 
-* **Quản lý văn bản và tài liệu (Document Management)**
-  Quản lý văn bản đến/đi, hợp đồng và tài liệu số hóa; hỗ trợ OCR trích xuất nội dung; workflow phê duyệt đa cấp; chữ ký điện tử; quản lý phiên bản tài liệu và dashboard theo dõi trạng thái xử lý.
+### Điểm nổi bật
 
-* **Tích hợp liên module theo luồng nghiệp vụ End-to-End**
-  Hệ thống tích hợp chặt chẽ giữa HRM – Customer – Document, cho phép tự động tạo và phê duyệt văn bản từ hợp đồng khách hàng, đảm bảo dữ liệu thống nhất và truy vết đầy đủ theo người chịu trách nhiệm.
-
-* **Tự động hóa và hỗ trợ thông minh**
-  Hỗ trợ trigger tự động (cron job, automated action), gửi email thông báo; định hướng tích hợp AI như OCR, chatbot trợ lý và tóm tắt văn bản nhằm giảm thao tác thủ công và tăng hiệu quả xử lý.
-
----
-
-## 🚀 1.1 Các tính năng nâng cấp (v2.0)
-
-Hệ thống đã được **nâng cấp toàn diện** trên cả 3 module, bổ sung nhiều nghiệp vụ mới so với phiên bản gốc:
-
-### 📋 Module Nhân sự (HRM) — 5 tính năng mới
-
-| Tính năng | Mô tả |
-|-----------|-------|
-| **Hợp đồng lao động** | Quản lý vòng đời HĐLĐ (thử việc/xác định/không TH/thời vụ), lương + phụ cấp, cron tự động cập nhật hết hạn |
-| **Nghỉ phép** | 6 loại phép (năm/ốm/thai sản/cưới/tang/việc riêng), workflow duyệt, cân đối phép năm theo nhân viên |
-| **Bảng lương** | Tính lương theo ngày công, BHXH/BHYT/BHTN, thuế TNCN 7 bậc lũy tiến, giảm trừ gia cảnh theo chuẩn VN |
-| **Đánh giá KPI** | 5 tiêu chí (thang 1–5), tự phân loại xuất sắc→yếu, kỳ tháng/quý/năm |
-| **Đào tạo** | Chương trình đào tạo (nội bộ/ngoài/online/hội thảo), chi phí, danh sách NV tham gia |
-
-Ngoài ra: **+20 trường mới** trên hồ sơ nhân viên (CCCD, địa chỉ, trình độ, hôn nhân, ngân hàng, MST...), **smart buttons**, thiết kế lại form view.
-
-### 📊 Module Khách hàng/CRM — 3 tính năng mới
-
-| Tính năng | Mô tả |
-|-----------|-------|
-| **Khảo sát hài lòng (CSAT/NPS)** | 3 phương pháp đo lường (CSAT 5 tiêu chí, NPS 0–10 phân nhóm Promoter/Passive/Detractor, CES) |
-| **Chiến dịch Marketing** | 7 loại chiến dịch, lọc KH tự động theo phân tầng & vòng đời, KPI: ROI, tỷ lệ phản hồi |
-| **Chấm điểm Lead tự động** | Scoring 0–100 dựa trên 5 tiêu chí (tương tác/doanh thu/phản hồi/trung thành/cơ hội), xếp hạng Hot/Warm/Cold/Frozen |
-
-### 📂 Module Văn bản — 3 tính năng mới
-
-| Tính năng | Mô tả |
-|-----------|-------|
-| **Sổ công văn** | Sổ theo dõi VB đến/đi theo năm & đơn vị, mở/khóa sổ, thống kê tự động |
-| **Phiếu luân chuyển** | Theo dõi lộ trình luân chuyển VB qua các bộ phận (nhận→xử lý→chuyển tiếp), hạn xử lý |
-| **Lưu trữ & Thu hồi** | Quản lý lưu trữ vật lý (vị trí, thời hạn 5–20 năm/vĩnh viễn), thu hồi, đề xuất hủy, cảnh báo hết hạn |
+- **Tích hợp liên module**: HRM cung cấp master data nhân sự cho CRM và QLVB; CRM liên kết tự động với QLVB qua hợp đồng/cơ hội
+- **AI & Automation**: Chatbot Gemini 2.5 Flash, OCR trích xuất văn bản, tóm tắt nội dung tự động
+- **Email thông báo Gmail**: Tự động gửi email khi duyệt nghỉ phép, chi trả lương, xác nhận đơn hàng, phân công văn bản
+- **Báo cáo nâng cao**: Dashboard, Calendar, Pivot, Graph cho mọi module
+- **Chữ ký điện tử**: Ký số trực tiếp trên văn bản, xác thực hash
 
 ---
 
-## 👥 Thành viên thực hiện
+## 👥 2. Thành viên thực hiện
 
-| STT | Mã sinh viên | Họ và tên           | Lớp        | Nhóm        |
-| --- | ------------ | ------------------- | ---------- | ----------  |
-| 1   | 1671020139   | Nguyễn Hữu Huy      | CNTT 16-01 | Nhóm 4      |
-| 2   | 1671020041   | Nguyễn Thanh Bình   | CNTT 16-01 | Nhóm 4      |
-| 3   | 1671020182   | Đào Thị Phương Long | CNTT 16-01 | Nhóm 4      |
+| STT | Mã SV | Họ và tên | Lớp | Nhóm |
+|-----|-------|-----------|------|------|
+| 1 | 1771020412 | Trần Văn Lâm | CNTT 17-07 | Nhóm 4 |
+| 2 | 1771020158 | Dương Ngọc Đông | CNTT 17-07 | Nhóm 4 |
+| 3 | 11771020519 | Nguyễn Thị Thanh Nhã | CNTT 17-07 | Nhóm 4 |
 
 ---
 
+## 🔧 3. Công nghệ sử dụng
 
-## 🔧 2. Các công nghệ được sử dụng
 <div align="center">
 
-### Hệ điều hành
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com/)
-### Công nghệ chính
-[![Odoo](https://img.shields.io/badge/Odoo-714B67?style=for-the-badge&logo=odoo&logoColor=white)](https://www.odoo.com/)
-[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![XML](https://img.shields.io/badge/XML-FF6600?style=for-the-badge&logo=codeforces&logoColor=white)](https://www.w3.org/XML/)
-### Cơ sở dữ liệu
+| Thành phần | Công nghệ |
+|------------|-----------|
+| **Nền tảng** | Odoo 15.0 Community |
+| **Backend** | Python 3.10 |
+| **Frontend** | JavaScript (OWL Framework), XML Views |
+| **Database** | PostgreSQL 14 (Docker) |
+| **AI/LLM** | Google Gemini 2.5 Flash (REST API) |
+| **Email** | Gmail SMTP (App Password) |
+| **OS** | Ubuntu / WSL2 |
+
+[![Odoo](https://img.shields.io/badge/Odoo_15-714B67?style=for-the-badge&logo=odoo&logoColor=white)](https://www.odoo.com/)
+[![Python](https://img.shields.io/badge/Python_3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Gemini](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+
 </div>
 
-## 🏗️ 3. Kiến trúc hệ thống 
 ---
 
-<img width="950" height="600" alt="image" src="https://github.com/user-attachments/assets/defa47a9-a18e-4a90-be35-b073fed400a7" />
-
-
-Hệ thống ERP được xây dựng trên nền tảng **Odoo**, theo mô hình **Client – Server mở rộng**, cho phép tích hợp linh hoạt với các dịch vụ bên ngoài như OCR, chữ ký số và AI.
-
-### Các thành phần chính
-
-* **Client Layer**
-  Người dùng truy cập hệ thống qua trình duyệt web (Odoo Web UI) hoặc thiết bị di động.
-
-* **Odoo Server**
-  Là trung tâm xử lý nghiệp vụ, triển khai các module ERP như:
-
-  * HRM (Quản lý nhân sự)
-  * Customer/CRM (Quản lý khách hàng, hợp đồng)
-  * Document (Quản lý văn bản, phê duyệt, ký số)
-
-* **PostgreSQL Database**
-  Lưu trữ toàn bộ dữ liệu nghiệp vụ tập trung, đảm bảo đồng bộ giữa các module.
-
-* **File Storage**
-  Lưu trữ tệp đính kèm (hợp đồng, văn bản, chữ ký), có thể sử dụng filesystem hoặc object storage.
-
-* **Integration Layer**
-  Kết nối hệ thống với các dịch vụ bên ngoài thông qua REST API, Webhook hoặc RPC.
-
-* **External Services & AI**
-
-  * OCR: Trích xuất nội dung từ tài liệu scan
-  * Digital Signature (PKI): Ký số và xác thực văn bản
-  * Notification: Gửi email/thông báo sự kiện
-  * Cloud Platform (tùy chọn): Lưu trữ và mở rộng dịch vụ
-
-### Luồng xử lý tổng quát
-
-**Client → Odoo Server → Database / File Storage → External Services**
-
-Kiến trúc này giúp hệ thống **dễ mở rộng, dễ tích hợp và phù hợp cho cả học tập lẫn triển khai thực tế**.
-
----
-
----
-
-## 🔄 End-to-End Flow: Số hóa hồ sơ khách hàng
-<p align="center">
-  <img src="docs/business flow/Nhom4_BusinessFlow_HeThongERPQuanLyKhachHang&VanBan.jpg" alt="End-to-End Business Flow - Digital Customer File" width="90%">
-</p>
-
-Luồng **Số hóa hồ sơ khách hàng** được lựa chọn làm luồng nghiệp vụ End-to-End vì thể hiện rõ nhất sự tích hợp giữa ba module cốt lõi của hệ thống ERP: **Nhân sự (HRM) – Quản lý khách hàng – Quản lý văn bản**.
-
-Luồng bắt đầu từ tạo hồ sơ khách hàng và hợp đồng, chuyển sang xử lý văn bản pháp lý, phê duyệt – ký điện tử và kết thúc bằng việc lưu trữ, liên kết hồ sơ số hóa. Trong toàn bộ quy trình, **HRM đóng vai trò dữ liệu gốc** để gán người phụ trách, người duyệt và người ký; hệ thống hỗ trợ **tự động hóa workflow** và **tích hợp AI/API** (OCR, chữ ký số, thông báo).
-
-
----
-
-## 🎨 Giao diện hệ thống
-
-*(Một số giao diện tiêu biểu của hệ thống)*
-
-Hệ thống được thiết kế với giao diện trực quan, thống nhất và thân thiện với người dùng, hỗ trợ đầy đủ các nghiệp vụ quản lý nhân sự, khách hàng và văn bản.
-
----
-
-### 📊 1. Dashboard tổng quan
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4feafa52-32d1-481d-a300-e7ed13a1ec32" width="900"/>
-</p>
-
-**Hình 3.1 – Giao diện Dashboard**
-Hiển thị tổng quan các chỉ số quan trọng của hệ thống như số lượng nhân viên, hợp đồng, đơn hàng và tình trạng hoạt động chung.
-
----
-
-### 👥 2. Quản lý nhân sự
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/64ebdfdd-92e6-4d34-a508-9ac472356676" width="900"/>
-</p>
-
-**Hình 3.2 – Giao diện quản lý nhân viên**
-Cho phép quản lý thông tin nhân viên, phân quyền, theo dõi trạng thái làm việc và các nghiệp vụ liên quan.
-
----
-
-### 🧑‍💼 3. Dashboard khách hàng
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/e2962e2b-012a-41d3-b724-2def46e292cd" width="900"/>
-</p>
-
-**Hình 3.3 – Dashboard khách hàng**
-Tổng hợp dữ liệu khách hàng, lịch sử giao dịch và các chỉ số hỗ trợ theo dõi mối quan hệ khách hàng (CRM).
-
----
-
-### 📄 4. Quản lý hợp đồng
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/aa526e11-ecc2-4599-b771-9007bc8dea54" width="900"/>
-</p>
-
-**Hình 3.4 – Giao diện danh sách hợp đồng**
-Quản lý danh sách hợp đồng, trạng thái hiệu lực, thời hạn và thông tin chi tiết của từng hợp đồng.
-
----
-
-### 💼 5. Quản lý cơ hội bán hàng
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/20a2c4b6-7aa8-4c42-9c0f-651e937642f4" width="900"/>
-</p>
-
-**Hình 3.5 – Giao diện danh sách cơ hội bán hàng**
-Theo dõi pipeline bán hàng, trạng thái từng cơ hội và hỗ trợ tối ưu hoạt động kinh doanh.
-
----
-
-### 🛒 6. Quản lý đơn hàng
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/8dae9b54-17cc-4abd-a6b4-5bdce1b1bd32" width="900"/>
-</p>
-
-**Hình 3.6 – Giao diện danh sách đơn hàng**
-Quản lý thông tin đơn hàng, trạng thái xử lý, khách hàng và giá trị đơn hàng.
-
----
-
-### 🗂️ 7. Quản lý văn bản
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/ed3a6559-a815-4430-9d3b-a9fd0a642560" width="900"/>
-</p>
-
-**Hình 3.7 – Dashboard quản lý văn bản**
-Tổng quan hệ thống văn bản đến – đi, hỗ trợ tìm kiếm và theo dõi trạng thái xử lý.
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/d9d74dcc-3ed1-42a8-bbf8-02a5318446f7" width="900"/>
-</p>
-
-**Hình 3.8 – Danh sách văn bản đến**
-Quản lý văn bản đến, phân loại, xử lý và theo dõi tiến độ.
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4c12ae94-9fef-402e-8fad-df5076a25b10" width="900"/>
-</p>
-
-**Hình 3.9 – Danh sách văn bản đi**
-Quản lý văn bản đi, lưu trữ lịch sử và trạng thái gửi.
-
----
-
-### 🤖 8. Chatbot hỗ trợ
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/a39f4bed-adae-49b3-8f70-e74efb92d64b" width="900"/>
-</p>
-
-**Hình 3.10 – Chatbot hỗ trợ người dùng**
-Chatbot tích hợp giúp hỗ trợ tra cứu thông tin, giải đáp nhanh các câu hỏi và hướng dẫn sử dụng hệ thống.
-
-
-
----
-## ⚙️ 4. Cài đặt
-
-### 4.1. Cài đặt công cụ, môi trường và các thư viện cần thiết
-
-#### 4.1.1. Tải project.
-```
-git clone https://gitlab.com/anhlta/odoo-fitdnu.git
-```
-#### 4.1.2. Cài đặt các thư viện cần thiết
-Người sử dụng thực thi các lệnh sau đề cài đặt các thư viện cần thiết
+## 🏗️ 4. Kiến trúc hệ thống
 
 ```
-sudo apt-get install libxml2-dev libxslt-dev libldap2-dev libsasl2-dev libssl-dev python3.10-distutils python3.10-dev build-essential libssl-dev libffi-dev zlib1g-dev python3.10-venv libpq-dev
+┌─────────────────────────────────────────────────────────┐
+│                    Client (Browser)                      │
+│                 http://localhost:8069                     │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────┐
+│                   Odoo Server                            │
+│  ┌──────────┐  ┌──────────────┐  ┌───────────────────┐  │
+│  │ nhan_su  │  │quan_ly_khach │  │ quan_ly_van_ban   │  │
+│  │  (HRM)   │◄─┤  _hang (CRM) │◄─┤    (Document)     │  │
+│  │          │  │              │  │                   │  │
+│  │• Nhân viên│  │• Khách hàng  │  │• Văn bản đến/đi   │  │
+│  │• Hợp đồng│  │• Cơ hội      │  │• Phê duyệt/Ký số  │  │
+│  │• Nghỉ phép│  │• Đơn hàng    │  │• OCR / Chatbot AI │  │
+│  │• Bảng lương│ │• Thanh toán  │  │• Sổ công văn      │  │
+│  │• KPI     │  │• Marketing   │  │• Luân chuyển      │  │
+│  │• Đào tạo │  │• Lead Score  │  │• Lưu trữ          │  │
+│  └──────────┘  └──────────────┘  └───────────────────┘  │
+│                                                          │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │  Email Notification Service (Gmail SMTP)            │ │
+│  │  Gemini AI REST API  │  Chữ ký điện tử (PKI)      │ │
+│  └─────────────────────────────────────────────────────┘ │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────────┐
+│            PostgreSQL (Docker - port 5431)                │
+└─────────────────────────────────────────────────────────┘
 ```
-#### 4.1.3. Khởi tạo môi trường ảo.
-- Khởi tạo môi trường ảo
+
+---
+
+## 📋 5. Chi tiết chức năng theo module
+
+### 5.1 Module `nhan_su` — Quản lý nhân sự (HRM)
+
+| Model | Chức năng |
+|-------|-----------|
+| `nhan_vien` | Hồ sơ nhân viên (50+ trường): thông tin cá nhân, CCCD, trình độ, ngân hàng, trạng thái làm việc |
+| `don_vi` | Cơ cấu phòng ban / đơn vị tổ chức |
+| `chuc_vu` | Danh mục chức vụ, cấp độ |
+| `hop_dong_lao_dong` | Vòng đời HĐLĐ: 4 loại, lương + phụ cấp, workflow 5 trạng thái, cron tự động |
+| `nghi_phep` + `so_nghi_phep` | 6 loại phép, workflow duyệt, cân đối phép năm + **email thông báo** |
+| `bang_luong` | Tính lương: BHXH/BHYT/BHTN, thuế TNCN 7 bậc, giảm trừ gia cảnh + **email khi chi trả** |
+| `danh_gia_kpi` | 5 tiêu chí (1–5), tự phân loại xuất sắc→yếu, kỳ tháng/quý/năm |
+| `dao_tao` | 4 hình thức đào tạo, chi phí, danh sách NV tham gia |
+| `lich_su_cong_tac` | Lịch sử điều động, thuyên chuyển |
+| `chung_chi_bang_cap` | Quản lý chứng chỉ, bằng cấp nhân viên |
+| `email_service` | Dịch vụ gửi email Gmail tập trung cho toàn hệ thống |
+
+**Views**: Form, Tree, Kanban, Graph, Dashboard, Calendar (nghỉ phép, đào tạo), Pivot (lương, KPI)
+
+### 5.2 Module `quan_ly_khach_hang` — CRM / Bán hàng
+
+| Model | Chức năng |
+|-------|-----------|
+| `khach_hang` | Hồ sơ KH cá nhân/doanh nghiệp, phân tầng (Đồng→Kim cương) |
+| `co_hoi_ban_hang` | Pipeline 6 giai đoạn (Mới→Thắng/Thua) + **email thắng/thua** |
+| `bao_gia` | Báo giá chi tiết, workflow KH đồng ý/từ chối |
+| `hop_dong` | Hợp đồng bán hàng, chữ ký điện tử |
+| `don_hang` + `don_hang_chi_tiet` | Đơn hàng, sản phẩm/dịch vụ + **email xác nhận/hoàn thành** |
+| `giao_hang` | Phiếu giao hàng, xác nhận vận chuyển |
+| `hoa_don` | Hóa đơn bán hàng |
+| `thanh_toan` | Thanh toán nhiều hình thức |
+| `cong_no_khach_hang` | Bảng điều khiển công nợ |
+| `khao_sat_hai_long` | CSAT / NPS / CES — đo hài lòng KH |
+| `chien_dich_marketing` | 7 loại chiến dịch, lọc KH tự động, KPI (ROI, tỷ lệ phản hồi) |
+| `cham_diem_lead` | Scoring 0–100, xếp hạng Hot/Warm/Cold/Frozen |
+| `loyalty_program` | Chương trình thân thiết, tích điểm |
+| `khieu_nai_phan_hoi` | Khiếu nại, SLA, mức ưu tiên |
+
+**Views**: Form, Tree, Kanban, Graph (đơn hàng, cơ hội, thanh toán), Pivot (đơn hàng, pipeline, tương tác), Dashboard, Calendar
+
+### 5.3 Module `quan_ly_van_ban` — Quản lý văn bản
+
+| Model | Chức năng |
+|-------|-----------|
+| `van_ban_den` | Tiếp nhận, phân công, xử lý VB đến + **email phân công** |
+| `van_ban_di` | Soạn thảo, phê duyệt, ký số, gửi VB đi + **email thông báo KH** |
+| `loai_van_ban` | Danh mục loại văn bản |
+| `luong_duyet` + `buoc_duyet` + `lich_su_duyet` | Phê duyệt đa cấp theo cấu hình |
+| `chu_ky_dien_tu` | Ký số PKI, xác thực hash, lưu audit trail |
+| `so_cong_van` | Sổ theo dõi VB đến/đi theo năm, mở/khóa sổ |
+| `phieu_luan_chuyen` | Luân chuyển VB qua bộ phận, chi tiết từng bước |
+| `luu_tru_van_ban` | Lưu trữ vật lý (tủ/kệ/ngăn), thời hạn, thu hồi, đề xuất hủy |
+| `chatbot_service` | Chatbot AI Gemini 2.5 Flash — tra cứu dữ liệu, hỏi đáp |
+| `mau_van_ban` | Quản lý mẫu văn bản |
+| `lich_su_phien_ban` | Quản lý phiên bản tài liệu |
+| `email_log` | Nhật ký email tự động |
+| `tai_lieu` | Lưu trữ tài liệu đính kèm |
+
+**Views**: Form, Tree, Kanban, Calendar (VB đến, luân chuyển), Graph (VB đến/đi), Pivot (VB đến/đi), Dashboard
+
+---
+
+## 🔗 6. Tích hợp liên module
+
 ```
+nhan_su (HRM)          quan_ly_khach_hang (CRM)        quan_ly_van_ban (QLVB)
+    │                          │                              │
+    │ ← depends ──────────────┘                              │
+    │ ← depends ─────────────────────────────────────────────┘
+    │                          │ ← depends ───────────────────┘
+    │                          │
+    ├── nhan_vien ──────► nhan_vien_phu_trach_id       nguoi_xu_ly_id
+    ├── don_vi ─────────► (phòng ban KH)               (phòng ban VB)
+    ├── email_service ──► gửi email đơn hàng           gửi email VB
+    │                          │
+    │                     co_hoi_ban_hang ────────► van_ban_den (auto-create)
+    │                     hop_dong ───────────────► van_ban_di (auto-create)
+    │                     don_hang ───────────────► giao_hang → hoa_don → thanh_toan
+```
+
+- **HRM → CRM**: Nhân viên phụ trách khách hàng, cơ hội, đơn hàng
+- **HRM → QLVB**: Người xử lý văn bản, người duyệt, người ký
+- **CRM → QLVB**: Tự động tạo văn bản từ hợp đồng/cơ hội bán hàng
+- **Email Service**: Dịch vụ tập trung tại `nhan_su`, dùng chung bởi cả 3 module
+
+---
+
+## ⚙️ 7. Cài đặt và chạy
+
+### 7.1 Yêu cầu
+
+- Ubuntu 20.04+ / WSL2
+- Python 3.10
+- Docker & Docker Compose
+- Gmail + App Password (cho tính năng email)
+- Gemini API Key (cho chatbot AI)
+
+### 7.2 Cài đặt nhanh
+
+```bash
+# 1. Clone project
+git clone <repo-url> 
+cd CNTT17-07-NHOM4
+
+# 2. Cài thư viện hệ thống
+sudo apt-get install libxml2-dev libxslt-dev libldap2-dev libsasl2-dev \
+  libssl-dev python3.10-distutils python3.10-dev build-essential libffi-dev \
+  zlib1g-dev python3.10-venv libpq-dev
+
+# 3. Tạo môi trường ảo
 python3.10 -m venv ./venv
-```
-- Thay đổi trình thông dịch sang môi trường ảo
-```
 source venv/bin/activate
-```
-- Chạy requirements.txt để cài đặt tiếp các thư viện được yêu cầu
-```
 pip3 install -r requirements.txt
-```
-### 4.2. Setup database
+pip3 install cryptography==41.0.7 pyOpenSSL==23.3.0 urllib3==1.26.18
 
-Khởi tạo database trên docker bằng việc thực thi file dockercompose.yml.
-```
+# 4. Khởi động PostgreSQL (Docker)
 sudo docker-compose up -d
-```
-### 4.3. Setup tham số chạy cho hệ thống
-Tạo tệp **odoo.conf** có nội dung như sau:
-```
-[options]
-addons_path = addons
-db_host = localhost
-db_password = odoo
-db_user = odoo
-db_port = 5431
-xmlrpc_port = 8069
-```
-Có thể kế thừa từ file **odoo.conf.template**
-### 4.4. Chạy hệ thống và cài đặt các ứng dụng cần thiết
-Lệnh chạy
-```
-python3 odoo-bin.py -c odoo.conf -u all
-```
-Người sử dụng truy cập theo đường dẫn _http://localhost:8069/_ để đăng nhập vào hệ thống.
 
-## 5. Nguồn tham khảo và kế thừa mã nguồn
+# 5. Cấu hình odoo.conf
+cp odoo.conf.template odoo.conf
+# Sửa nếu cần (port, db_name...)
 
-Hệ thống được xây dựng dựa trên việc **kế thừa có chọn lọc và mở rộng** từ các mã nguồn và tài nguyên sau:
+# 6. Cấu hình .env (email + AI)
+cat > .env << 'EOF'
+GEMINI_API_KEY=your-gemini-api-key
+GMAIL_EMAIL=your-email@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+EOF
 
-* **Repository quản lý khách hàng và CRM (tham khảo)**
-  GitHub: [https://github.com/yukiharadev/TTDN-15-05-N2](https://github.com/yukiharadev/TTDN-15-05-N2)
-  → Kế thừa nền tảng quản lý khách hàng/CRM và mở rộng thành vòng đời bán hàng đầy đủ theo mô hình ERP.
+# 7. Cài đặt module lần đầu
+python3 odoo-bin.py -c odoo.conf -d tranvanlam -i nhan_su,quan_ly_khach_hang,quan_ly_van_ban --stop-after-init
 
-* **Repository quản lý văn bản (tham khảo)**
-  GitHub: [https://github.com/ngocanhit201/TTDN-15-04-N2](https://github.com/ngocanhit201/TTDN-15-04-N2)
-  → Kế thừa nghiệp vụ quản lý văn bản cơ bản và nâng cấp workflow duyệt, chữ ký điện tử, quản lý phiên bản.
+# 8. Chạy server
+python3 odoo-bin.py -c odoo.conf -d tranvanlam
+```
 
-* **Repository nền tảng học phần Thực tập doanh nghiệp – FIT DNU**
-  GitHub: [https://github.com/FIT-DNU/Business-Internship](https://github.com/FIT-DNU/Business-Internship)
-  → Là nền tảng triển khai chung cho các đề tài ERP, định hướng chuẩn hóa cấu trúc hệ thống và yêu cầu học phần.
+Truy cập: **http://localhost:8069** — Đăng nhập: `admin` / `admin`
+
+### 7.3 Cập nhật module
+
+```bash
+# Dừng server (Ctrl+C), sau đó:
+python3 odoo-bin.py -c odoo.conf -d tranvanlam -u nhan_su,quan_ly_khach_hang,quan_ly_van_ban --stop-after-init
+python3 odoo-bin.py -c odoo.conf -d tranvanlam
+```
+
+---
+
+## 📁 8. Cấu trúc thư mục
+
+```
+TTDN-16-01-N4/
+├── odoo-bin.py              # Entry point
+├── odoo.conf                # Cấu hình Odoo
+├── .env                     # API keys + Gmail (gitignored)
+├── docker-compose.yml       # PostgreSQL container
+├── requirements.txt         # Python dependencies
+│
+├── addons/
+│   ├── nhan_su/                     # Module Nhân sự (HRM)
+│   │   ├── models/                  # 15 model files
+│   │   │   ├── nhan_vien.py         # Hồ sơ nhân viên
+│   │   │   ├── hop_dong_lao_dong.py # Hợp đồng lao động
+│   │   │   ├── nghi_phep.py         # Nghỉ phép + email
+│   │   │   ├── bang_luong.py        # Bảng lương + email
+│   │   │   ├── danh_gia_kpi.py      # Đánh giá KPI
+│   │   │   ├── dao_tao.py           # Đào tạo
+│   │   │   ├── email_service.py     # Dịch vụ email tập trung
+│   │   │   └── ...
+│   │   ├── views/                   # 16 XML view files
+│   │   │   ├── advanced_views.xml   # Calendar, Pivot, Graph
+│   │   │   ├── res_config_settings_views.xml  # Cấu hình email
+│   │   │   └── ...
+│   │   └── security/
+│   │
+│   ├── quan_ly_khach_hang/          # Module CRM
+│   │   ├── models/                  # 19 model files
+│   │   │   ├── khach_hang.py        # Hồ sơ khách hàng
+│   │   │   ├── co_hoi_ban_hang.py   # Pipeline + email
+│   │   │   ├── don_hang.py          # Đơn hàng + email
+│   │   │   ├── cham_diem_lead.py    # Lead scoring
+│   │   │   ├── khao_sat_hai_long.py # CSAT/NPS
+│   │   │   └── ...
+│   │   ├── views/                   # 25 XML view files
+│   │   │   ├── advanced_views.xml   # Graph, Pivot
+│   │   │   └── ...
+│   │   └── security/
+│   │
+│   └── quan_ly_van_ban/             # Module QLVB
+│       ├── models/                  # 22 model files
+│       │   ├── van_ban_den.py       # VB đến + email
+│       │   ├── van_ban_di.py        # VB đi + email
+│       │   ├── chatbot_service.py   # Gemini AI chatbot
+│       │   ├── chu_ky_dien_tu.py    # Chữ ký điện tử
+│       │   ├── phieu_luan_chuyen.py # Phiếu luân chuyển
+│       │   └── ...
+│       ├── views/                   # 25 XML view files
+│       │   ├── advanced_views.xml   # Calendar, Graph, Pivot
+│       │   └── ...
+│       ├── static/src/js/           # Chatbot UI (JS)
+│       └── security/
+│
+├── odoo/                    # Odoo core framework (không sửa)
+├── docs/                    # Tài liệu, logo, hình ảnh
+└── setup/                   # Scripts cài đặt
+```
+
+---
+
+## 🎨 9. Giao diện hệ thống
+
+### Dashboard tổng quan
+<p align="center">
+  <img src="" width="900"/>
+</p>
+
+### Quản lý nhân sự
+<p align="center">
+  <img src="" width="900"/>
+</p>
+
+### Dashboard khách hàng
+<p align="center">
+  <img src="" width="900"/>
+</p>
+
+### Quản lý văn bản
+<p align="center">
+  <img src="" width="900"/>
+</p>
+
+### Chatbot AI Gemini
+<p align="center">
+  <img src="" width="900"/>
+</p>
+
+---
+
+## 🔥 10. Demo
+
+🎥 **Video demo**: https://youtu.be/-glglUkN3pc
+
+---
+
+## 📚 11. Tài liệu liên quan
+
+| File | Mô tả |
+|------|-------|
+| [SO_SANH_CU_MOI.md](SO_SANH_CU_MOI.md) | So sánh chi tiết giữa phiên bản cũ và mới |
+| [HUONG_DAN_TEST.md](HUONG_DAN_TEST.md) | Hướng dẫn test toàn bộ dự án từ đầu đến cuối |
+| [upgrade-plan.md](upgrade-plan.md) | Kế hoạch nâng cấp chi tiết |
+
+---
+
+## 📎 12. Nguồn tham khảo
+
+* **Repository CRM tham khảo**: [TTDN-15-05-N2](https://github.com/yukiharadev/TTDN-15-05-N2)
+* **Repository QLVB tham khảo**: [TTDN-15-04-N2](https://github.com/ngocanhit201/TTDN-15-04-N2)
+* **Nền tảng học phần**: [Business-Internship (FIT-DNU)](https://github.com/FIT-DNU/Business-Internship)
+
+---
 
 ## 🖼️ Poster
 
 <p align="center">
-  <img
-    width="709"
-    height="1024"
-    alt="1770068271208-89d4bbf0-3bf1-44b4-8ee6-1627af8daf9e_1"
-    src="https://github.com/user-attachments/assets/e1477dff-d1db-4011-9553-f9cccee1dec6"
-  />
+  <img width="709" height="1024" alt="Poster" src=""/>
 </p>
-
-## 🔥 Demo
-
-Dưới đây là video demo giới thiệu chức năng chính của dự án:
-
-🎥 **Xem video demo:**  
-🔗 https://drive.google.com/file/d/1XpkW_k6fBDpILEwmaxLWcl24tdXTLVJb/view?usp=sharing
-
-*Video thể hiện toàn bộ workflow & tính năng chính.*
-
-
-## 📝 6. License
-
-
-© 2024 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
 
 ---
 
-    
+## 📝 License
+
+© 2024–2026 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.

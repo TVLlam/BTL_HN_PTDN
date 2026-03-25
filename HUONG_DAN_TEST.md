@@ -1,696 +1,572 @@
-# 📋 HƯỚNG DẪN CHẠY VÀ TEST DỰ ÁN TỪ ĐẦU ĐẾN CUỐI
+# HƯỚNG DẪN TEST — ERP: Quản lý Nhân sự – Khách hàng – Văn bản
 
-> **Dự án**: ERP Quản lý Nhân sự – Khách hàng – Văn bản  
-> **Nền tảng**: Odoo 15.0 · Python 3.10 · PostgreSQL 10  
-> **Hệ điều hành**: Ubuntu / WSL2
-
----
-
-## Mục lục
-
-1. [Yêu cầu hệ thống](#1-yêu-cầu-hệ-thống)
-2. [Cài đặt môi trường](#2-cài-đặt-môi-trường)
-3. [Cấu hình dự án](#3-cấu-hình-dự-án)
-4. [Khởi chạy dự án lần đầu](#4-khởi-chạy-dự-án-lần-đầu)
-5. [Cài đặt module](#5-cài-đặt-module)
-6. [Test Module Nhân sự (HRM)](#6-test-module-nhân-sự-hrm)
-7. [Test Module CRM (Khách hàng & Bán hàng)](#7-test-module-crm-khách-hàng--bán-hàng)
-8. [Test Module QLVB (Quản lý Văn bản)](#8-test-module-qlvb-quản-lý-văn-bản)
-9. [Test Email thông báo](#9-test-email-thông-báo)
-10. [Test Báo cáo nâng cao](#10-test-báo-cáo-nâng-cao)
-11. [Test Chatbot AI](#11-test-chatbot-ai)
-12. [Lệnh cập nhật module](#12-lệnh-cập-nhật-module)
-13. [Xử lý lỗi thường gặp](#13-xử-lý-lỗi-thường-gặp)
+> **Dự án**: CNTT17-07-NHOM4  
+> **Nền tảng**: Odoo 15.0 (Community) · Python 3.10 · PostgreSQL 10 (Docker)  
+> **Hệ điều hành**: Ubuntu 20.04+ / WSL2  
+> **Cập nhật**: 25/03/2026
 
 ---
 
-## 1. Yêu cầu hệ thống
+## MỤC LỤC
 
-| Phần mềm | Phiên bản tối thiểu | Ghi chú |
-|-----------|---------------------|---------|
-| Python | 3.10+ | Khuyến nghị 3.10.x |
-| Docker | 20.10+ | Để chạy PostgreSQL |
-| Docker Compose | 1.29+ | Hoặc docker compose (v2) |
-| Git | 2.x | Clone dự án |
-| pip | 21+ | Cài thư viện Python |
-| Trình duyệt | Chrome/Firefox mới nhất | Truy cập giao diện web |
+1. [Yêu cầu môi trường](#1-yêu-cầu-môi-trường)
+2. [Cài đặt và khởi động](#2-cài-đặt-và-khởi-động)
+3. [Cài đặt module](#3-cài-đặt-module)
+4. [Test Module Nhân sự (nhan_su)](#4-test-module-nhân-sự-nhan_su)
+5. [Test Module CRM / Khách hàng (quan_ly_khach_hang)](#5-test-module-crm--khách-hàng-quan_ly_khach_hang)
+6. [Test Module Văn bản (quan_ly_van_ban)](#6-test-module-văn-bản-quan_ly_van_ban)
+7. [Test Tích hợp liên module](#7-test-tích-hợp-liên-module)
+8. [Test Email Gmail](#8-test-email-gmail)
+9. [Test Chatbot AI Gemini](#9-test-chatbot-ai-gemini)
+10. [Checklist tổng hợp](#10-checklist-tổng-hợp)
 
 ---
 
-## 2. Cài đặt môi trường
+## 1. Yêu cầu môi trường
 
-### Bước 2.1: Clone dự án
+| Thành phần | Phiên bản | Ghi chú |
+|---|---|---|
+| Python | 3.10.x | Bắt buộc đúng 3.10 |
+| PostgreSQL | 10 (Docker) | Chạy qua docker-compose, port **5431** |
+| Docker | 20.10+ | Docker Compose v3.5 |
+| RAM | ≥ 4 GB | Odoo + PostgreSQL |
+| Gmail App Password | 16 ký tự | Dùng cho thông báo email |
+| Gemini API Key | — | Google AI Studio |
 
-```bash
-git clone <url-repository> TTDN-16-01-N4
-cd TTDN-16-01-N4
-```
+---
 
-### Bước 2.2: Khởi động PostgreSQL bằng Docker
+## 2. Cài đặt và khởi động
 
-```bash
-# Khởi động PostgreSQL container
-docker-compose up -d
-
-# Kiểm tra container đang chạy
-docker ps
-# → Phải thấy: postgres_odoo-base-15-01 ở trạng thái Up, port 5431
-```
-
-> **Lưu ý**: PostgreSQL chạy trên port **5431** (không phải 5432 mặc định)
-
-### Bước 2.3: Cài đặt thư viện Python
+### 2.1 Clone và thiết lập môi trường ảo
 
 ```bash
-# Cài đặt requirements
+cd /home/$USER
+git clone <repo-url> CNTT17-07-NHOM4
+cd CNTT17-07-NHOM4
+
+# Cài thư viện hệ thống
+sudo apt-get update && sudo apt-get install -y \
+  libxml2-dev libxslt-dev libldap2-dev libsasl2-dev \
+  libssl-dev python3.10-distutils python3.10-dev \
+  build-essential libffi-dev zlib1g-dev python3.10-venv libpq-dev
+
+# Tạo và kích hoạt venv
+python3.10 -m venv venv
+source venv/bin/activate
+
+# Cài Python dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
-
-# Cài thêm các thư viện bắt buộc cho module custom
 pip install cryptography==41.0.7 pyOpenSSL==23.3.0 urllib3==1.26.18
 ```
 
-> **Quan trọng**: Phải dùng đúng phiên bản `cryptography==41.0.7` và `pyOpenSSL==23.3.0` để tránh lỗi `Cannot import name 'x509' from 'cryptography'`
-
-### Bước 2.4: Kiểm tra kết nối PostgreSQL
+### 2.2 Khởi động PostgreSQL
 
 ```bash
-# Test kết nối (password: odoo)
-psql -h localhost -p 5431 -U odoo -d postgres -c "SELECT 1;"
+# Trong thư mục gốc dự án
+sudo docker-compose up -d
+
+# Xác nhận container đang chạy
+sudo docker ps | grep postgres_odoo
 ```
 
----
+Kết quả mong đợi: container `postgres_odoo-base-15-01` ở trạng thái **Up**.
 
-## 3. Cấu hình dự án
+### 2.3 Tạo file cấu hình
 
-### Bước 3.1: File odoo.conf
-
-File `odoo.conf` đã có sẵn cấu hình:
-
-```ini
-[options]
-addons_path = addons
-db_host = localhost
-db_password = odoo
-db_user = odoo
-db_port = 5431
-xmlrpc_port = 8069
+**`odoo.conf`** — nên dùng file mẫu sẵn có:
+```bash
+cp odoo.conf.template odoo.conf
+# Kiểm tra: db_port = 5431, db_user = odoo, db_password = odoo
 ```
 
-### Bước 3.2: File .env (BẮT BUỘC)
-
-Mở file `.env` ở thư mục gốc dự án và cập nhật:
-
-```env
-# API Key cho Chatbot AI (Gemini)
-GEMINI_API_KEY=your-gemini-api-key-here
-
-# Gmail thong bao - Thay bang email va App Password cua ban
-GMAIL_EMAIL=your-email@gmail.com
+**`.env`** — API keys (nếu chưa có):
+```bash
+cat > .env << 'EOF'
+GEMINI_API_KEY=<your-gemini-api-key>
+GMAIL_EMAIL=<your-email@gmail.com>
 GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+EOF
 ```
 
-#### Cách lấy Gmail App Password:
+> **Lưu ý**: File `.env` đã có sẵn với key thật. Không commit file này lên Git.
 
-1. Truy cập https://myaccount.google.com/security
-2. Bật **Xác minh 2 bước** (2-Step Verification) nếu chưa bật
-3. Vào **Mật khẩu ứng dụng** (App Passwords)
-4. Tạo mật khẩu mới → Chọn app: "Thư" → Chọn thiết bị: "Khác" → Đặt tên "Odoo ERP"
-5. Copy mã 16 ký tự (dạng `xxxx xxxx xxxx xxxx`) vào `GMAIL_APP_PASSWORD`
+### 2.4 Xác nhận kết nối database
 
-#### Cách lấy Gemini API Key:
-
-1. Truy cập https://aistudio.google.com/apikey
-2. Nhấn **Create API Key**
-3. Copy key vào `GEMINI_API_KEY`
+```bash
+source venv/bin/activate
+python3 odoo-bin.py shell -c odoo.conf --stop-after-init 2>&1 | tail -5
+```
 
 ---
 
-## 4. Khởi chạy dự án lần đầu
+## 3. Cài đặt module
 
-### Bước 4.1: Tạo database và cài module cơ bản
-
-```bash
-# Chạy lần đầu - tự tạo database "tranvanlam" và cài module base
-python3 odoo-bin.py -c odoo.conf -d tranvanlam --stop-after-init
-```
-
-### Bước 4.2: Cài 3 module chính
+### Cài lần đầu (database mới)
 
 ```bash
+source venv/bin/activate
 python3 odoo-bin.py -c odoo.conf -d tranvanlam \
   -i nhan_su,quan_ly_khach_hang,quan_ly_van_ban \
   --stop-after-init
 ```
 
-> **Lưu ý**: Lệnh `-i` (install) dùng cho lần cài đầu tiên. Nếu module đã cài rồi, dùng `-u` (update).
+Thời gian ước tính: **3–7 phút** (tùy phần cứng).
 
-### Bước 4.3: Khởi chạy server
+### Khởi động server
 
 ```bash
-# Chạy foreground (thấy log)
 python3 odoo-bin.py -c odoo.conf -d tranvanlam
-
-# Hoặc chạy background
-nohup python3 odoo-bin.py -c odoo.conf -d tranvanlam > odoo.log 2>&1 &
 ```
 
-### Bước 4.4: Truy cập giao diện
+Truy cập: **http://localhost:8069**  
+Đăng nhập: `admin` / `admin`
 
-1. Mở trình duyệt: **http://localhost:8069**
-2. Đăng nhập:
-   - **Email**: `admin`
-   - **Password**: `admin` (hoặc mật khẩu bạn đã đặt)
-
----
-
-## 5. Cài đặt module
-
-Sau khi đăng nhập, cài các module:
-
-1. Vào **Cài đặt** (Settings) → **Ứng dụng** (Apps)
-2. Bỏ filter "Apps" → Tìm kiếm:
-   - `Quản lý nhân sự` → Nhấn **Cài đặt**
-   - `Quản lý khách hàng` → Nhấn **Cài đặt**
-   - `Quản lý văn bản` → Nhấn **Cài đặt**
-
-Hoặc dùng lệnh terminal:
-```bash
-python3 odoo-bin.py -c odoo.conf -d tranvanlam \
-  -i nhan_su,quan_ly_khach_hang,quan_ly_van_ban \
-  --stop-after-init
-```
-
----
-
-## 6. Test Module Nhân sự (HRM)
-
-### 6.1. Tạo đơn vị / phòng ban
-
-1. Menu: **Nhân sự** → **Đơn vị**
-2. Nhấn **Tạo**
-3. Điền:
-   - Tên đơn vị: `Phòng Kỹ thuật`
-   - Mã đơn vị: `KT`
-   - Đơn vị cha: (trống hoặc chọn đơn vị cấp trên)
-4. Nhấn **Lưu**
-5. ✅ **Kết quả**: Đơn vị xuất hiện trong danh sách
-
-### 6.2. Tạo chức vụ
-
-1. Menu: **Nhân sự** → **Chức vụ**
-2. Tạo: `Trưởng phòng`, `Nhân viên`, `Giám đốc`
-3. ✅ **Kết quả**: Chức vụ xuất hiện trong danh sách
-
-### 6.3. Tạo nhân viên
-
-1. Menu: **Nhân sự** → **Nhân viên**
-2. Nhấn **Tạo**, điền đầy đủ:
-   - **Thông tin cơ bản**: Họ tên, giới tính, ngày sinh, SĐT, email
-   - **Công tác**: Đơn vị, chức vụ, ngày vào làm
-   - **CCCD/CMND**: Số CCCD, ngày cấp, nơi cấp
-   - **Địa chỉ**: Tỉnh, quận/huyện, địa chỉ chi tiết
-   - **Ngân hàng**: Số tài khoản, tên ngân hàng, chi nhánh
-3. Nhấn **Lưu**
-4. ✅ **Kết quả**: Nhân viên được tạo với mã tự sinh (NV-XXXX)
-
-> **Quan trọng**: Điền email nhân viên (email thật) để test email thông báo ở bước sau
-
-### 6.4. Tạo hợp đồng lao động
-
-1. Từ form nhân viên → Nhấn smart button **Hợp đồng** (hoặc Menu → Hợp đồng LĐ)
-2. Nhấn **Tạo**:
-   - Nhân viên: Chọn NV vừa tạo
-   - Loại HĐ: `Xác định thời hạn`
-   - Lương cơ bản: `15000000`
-   - Phụ cấp: `2000000`
-   - Ngày bắt đầu → Ngày kết thúc
-3. Workflow: **Nháp** → Nhấn **Kích hoạt** → **Đang thực hiện**
-4. ✅ **Kết quả**: HĐ chuyển sang trạng thái "Đang thực hiện", mã tự sinh HDLD-XXXX
-
-### 6.5. Tạo đơn nghỉ phép
-
-1. Menu: **Nhân sự** → **Nghỉ phép**
-2. Nhấn **Tạo**:
-   - Nhân viên: Chọn NV
-   - Loại nghỉ: `Nghỉ phép năm`
-   - Ngày bắt đầu → Ngày kết thúc
-   - Lý do: `Nghỉ phép gia đình`
-3. Nhấn **Gửi duyệt** → Trạng thái: "Chờ duyệt"
-4. Nhấn **Duyệt** → Trạng thái: "Đã duyệt"
-5. ✅ **Kết quả**: 
-   - Đơn chuyển "Đã duyệt"
-   - **📧 Email gửi cho nhân viên** (kiểm tra hộp thư)
-
-#### Test từ chối:
-1. Tạo đơn nghỉ phép mới → **Gửi duyệt**
-2. Nhấn **Từ chối**
-3. ✅ **Kết quả**: **📧 Email thông báo từ chối** gửi cho nhân viên
-
-### 6.6. Tạo bảng lương
-
-1. Menu: **Nhân sự** → **Bảng lương**
-2. Nhấn **Tạo**:
-   - Nhân viên: Chọn NV (có HĐ đang thực hiện)
-   - Tháng/Năm: `3 / 2026`
-   - Nhấn **Tính lương** → Hệ thống tự tính:
-     - Lương cơ bản + phụ cấp
-     - BHXH (8%), BHYT (1.5%), BHTN (1%)
-     - Giảm trừ bản thân (11,000,000đ)
-     - Thuế TNCN theo bậc
-     - Thực lĩnh
-3. Nhấn **Chi trả** → Trạng thái: "Đã chi trả"
-4. ✅ **Kết quả**: **📧 Email chi tiết lương** gửi cho nhân viên
-
-### 6.7. Tạo đánh giá KPI
-
-1. Menu: **Nhân sự** → **Đánh giá KPI**
-2. Nhấn **Tạo**:
-   - Nhân viên, kỳ đánh giá (Tháng/Quý/Năm), tháng/năm
-   - Điểm 5 tiêu chí (1-5): Kết quả công việc, Năng lực, Thái độ, Kỹ năng giao tiếp, Sáng tạo
-3. Nhấn **Gửi đánh giá** → **Phê duyệt**
-4. ✅ **Kết quả**: Điểm TB tự tính, xếp loại tự động (Xuất sắc/Tốt/Khá/TB/Yếu)
-
-### 6.8. Tạo chương trình đào tạo
-
-1. Menu: **Nhân sự** → **Đào tạo**
-2. Nhấn **Tạo**:
-   - Tên: `Khóa Python nâng cao`
-   - Hình thức: `Đào tạo nội bộ`
-   - Ngày bắt đầu/kết thúc, chi phí
-   - Tab **Danh sách NV**: Thêm nhân viên tham gia
-3. Nhấn **Lưu**
-4. ✅ **Kết quả**: Chương trình đào tạo hiển thị đúng
-
----
-
-## 7. Test Module CRM (Khách hàng & Bán hàng)
-
-### 7.1. Tạo khách hàng
-
-1. Menu: **CRM** → **Khách hàng**
-2. Nhấn **Tạo**:
-   - Tên KH: `Công ty ABC`
-   - Loại: `Doanh nghiệp`
-   - Email: `abc@company.com` (điền email thật để test)
-   - SĐT, Địa chỉ, MST
-3. Nhấn **Lưu**
-4. ✅ **Kết quả**: KH được tạo, mã tự sinh KH-XXXX
-
-### 7.2. Tạo cơ hội bán hàng
-
-1. Menu: **CRM** → **Cơ hội bán hàng** (Kanban view)
-2. Nhấn **Tạo** trong cột "Tiềm năng":
-   - Tên: `Dự án phần mềm ABC`
-   - Khách hàng: `Công ty ABC`
-   - NV phụ trách: Chọn nhân viên (có email)
-   - Giá trị: `50000000`
-3. Kéo thả qua các giai đoạn: Tiềm năng → Thương lượng → Báo giá → Đàm phán
-4. Kéo sang **Thắng**
-5. ✅ **Kết quả**: 
-   - Cơ hội chuyển trạng thái "Thắng"
-   - **📧 Email chúc mừng** gửi cho NV phụ trách
-
-#### Test thua:
-1. Tạo cơ hội mới → Kéo sang **Thua**
-2. ✅ **Kết quả**: **📧 Email thông báo thua** gửi cho NV phụ trách
-
-### 7.3. Tạo báo giá
-
-1. Menu: **CRM** → **Báo giá**
-2. Nhấn **Tạo**:
-   - Khách hàng, nhân viên, ngày báo giá, hiệu lực
-   - Tab chi tiết: Thêm sản phẩm/dịch vụ, số lượng, đơn giá
-3. Nhấn **Gửi khách** → **Khách duyệt**
-4. ✅ **Kết quả**: Báo giá chuyển trạng thái, tổng tiền tự tính
-
-### 7.4. Tạo hợp đồng
-
-1. Menu: **CRM** → **Hợp đồng**
-2. Nhấn **Tạo**:
-   - Khách hàng, từ báo giá, giá trị, thời hạn
-3. Nhấn **Kích hoạt**
-4. ✅ **Kết quả**: HĐ chuyển "Đang thực hiện"
-
-### 7.5. Tạo đơn hàng
-
-1. Menu: **CRM** → **Đơn hàng**
-2. Nhấn **Tạo**:
-   - Khách hàng: `Công ty ABC`
-   - Chi tiết đơn hàng: Tên SP, SL, đơn giá
-3. Nhấn **Xác nhận**
-4. ✅ **Kết quả**: 
-   - Đơn chuyển "Đã xác nhận"
-   - **📧 Email xác nhận đơn hàng** gửi cho khách hàng
-
-5. Nhấn **Hoàn thành**
-6. ✅ **Kết quả**: 
-   - **📧 Email hoàn thành đơn hàng** gửi cho khách hàng
-
-### 7.6. Tạo giao hàng
-
-1. Menu: **CRM** → **Giao hàng**
-2. Tạo phiếu giao hàng, chọn đơn hàng, địa chỉ, ngày giao
-3. Cập nhật trạng thái: Đang giao → Đã giao
-4. ✅ **Kết quả**: Phiếu giao hàng cập nhật
-
-### 7.7. Tạo hóa đơn & thanh toán
-
-1. Menu: **CRM** → **Hóa đơn** → Tạo → Xác nhận
-2. Menu: **CRM** → **Thanh toán** → Tạo từ hóa đơn → Xác nhận
-3. ✅ **Kết quả**: Công nợ khách hàng tự cập nhật
-
-### 7.8. Test tính năng nâng cao
-
-1. **Chấm điểm Lead**: CRM → Chấm điểm Lead → Kiểm tra điểm tự động
-2. **Khảo sát hài lòng**: CRM → Khảo sát → Tạo khảo sát CSAT/NPS/CES
-3. **Chiến dịch marketing**: CRM → Chiến dịch → Tạo và kiểm tra KPI
-
----
-
-## 8. Test Module QLVB (Quản lý Văn bản)
-
-### 8.1. Tạo loại văn bản
-
-1. Menu: **Văn bản** → **Danh mục** → **Loại văn bản**
-2. Tạo: `Công văn`, `Quyết định`, `Thông báo`, `Báo cáo`
-3. ✅ **Kết quả**: Danh sách loại VB hiển thị
-
-### 8.2. Tạo văn bản đến
-
-1. Menu: **Văn bản** → **Văn bản đến**
-2. Nhấn **Tạo**:
-   - Số ký hiệu: `123/CV-ABC`
-   - Nơi ban hành: `Công ty ABC`
-   - Loại VB: `Công văn`
-   - Trích yếu: `Về việc hợp tác kinh doanh`
-   - Ngày đến, độ khẩn, hạn xử lý
-   - Người xử lý: Chọn nhân viên (có email)
-3. Nhấn **Tiếp nhận**
-4. Nhấn **Phê duyệt**
-5. ✅ **Kết quả**:
-   - VB chuyển trạng thái "Đã phê duyệt"
-   - **📧 Email phân công** gửi cho người xử lý
-
-### 8.3. Tạo văn bản đi
-
-1. Menu: **Văn bản** → **Văn bản đi**
-2. Nhấn **Tạo**:
-   - Số ký hiệu, loại VB, trích yếu
-   - Nơi nhận, người ký
-   - Người nhận email (nếu cần gửi thông báo)
-3. Nhấn **Trình ký** → **Phê duyệt** → **Ban hành**
-4. ✅ **Kết quả**:
-   - VB chuyển "Đã ban hành"
-   - **📧 Email thông báo** gửi khi phê duyệt (nếu có người nhận)
-
-### 8.4. Sổ công văn
-
-1. Menu: **Văn bản** → **Sổ công văn**
-2. Tạo sổ: Sổ VB đến 2026, Sổ VB đi 2026
-3. Mở/Khóa sổ, kiểm tra danh sách VB trong sổ
-4. ✅ **Kết quả**: Sổ hiển thị đúng VB liên quan
-
-### 8.5. Phiếu luân chuyển
-
-1. Menu: **Văn bản** → **Phiếu luân chuyển**
-2. Tạo phiếu → Chọn VB → Thêm chi tiết luân chuyển (bộ phận, thời hạn)
-3. Cập nhật trạng thái từng bước
-4. ✅ **Kết quả**: Lộ trình luân chuyển hiển thị đúng
-
-### 8.6. Lưu trữ văn bản
-
-1. Menu: **Văn bản** → **Lưu trữ**
-2. Tạo hồ sơ lưu trữ → Chọn VB → Vị trí, thời hạn
-3. Test: Thu hồi, Đề xuất hủy
-4. ✅ **Kết quả**: Trạng thái lưu trữ cập nhật đúng
-
-### 8.7. Luồng duyệt
-
-1. Menu: **Văn bản** → **Cấu hình** → **Luồng duyệt**
-2. Tạo luồng duyệt nhiều bước
-3. Gán vào VB đi → Test phê duyệt qua từng bước
-4. ✅ **Kết quả**: Lịch sử duyệt ghi nhận đầy đủ
-
-### 8.8. Chữ ký điện tử
-
-1. Menu: **Văn bản** → **Chữ ký điện tử**
-2. Tạo chữ ký cho user (vẽ/upload)
-3. Ký VB đi → Kiểm tra chữ ký hiển thị
-4. ✅ **Kết quả**: Chữ ký gắn vào VB
-
----
-
-## 9. Test Email thông báo
-
-### 9.1. Cấu hình email (2 cách)
-
-#### Cách 1: Qua file .env (khuyến nghị)
-
-Sửa file `.env` ở gốc dự án:
-```env
-GMAIL_EMAIL=your-email@gmail.com
-GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
-```
-
-#### Cách 2: Qua giao diện Odoo
-
-1. Menu: **Cài đặt** (Settings) → Cuộn xuống phần **Email thông báo**
-2. Điền:
-   - Gmail: `your-email@gmail.com`
-   - App Password: `xxxx xxxx xxxx xxxx`
-3. Nhấn **Lưu**
-
-### 9.2. Checklist test email
-
-| # | Sự kiện | Cách test | Email gửi cho |
-|---|---------|-----------|---------------|
-| 1 | Duyệt nghỉ phép | Tạo đơn → Gửi duyệt → Duyệt | Nhân viên |
-| 2 | Từ chối nghỉ phép | Tạo đơn → Gửi duyệt → Từ chối | Nhân viên |
-| 3 | Chi trả lương | Tạo bảng lương → Tính lương → Chi trả | Nhân viên |
-| 4 | Xác nhận đơn hàng | Tạo đơn hàng → Xác nhận | Khách hàng |
-| 5 | Hoàn thành đơn hàng | Đơn đã xác nhận → Hoàn thành | Khách hàng |
-| 6 | Cơ hội thắng | Kéo cơ hội sang "Thắng" | NV phụ trách |
-| 7 | Phân công VB đến | Tạo VB đến → Phê duyệt | Người xử lý |
-| 8 | Phê duyệt VB đi | Tạo VB đi → Phê duyệt | Người nhận |
-
-> **Lưu ý**: Để test email, các nhân viên/khách hàng phải có trường **email** được điền email thật
-
-### 9.3. Kiểm tra email đã gửi
-
-- Kiểm tra hộp thư (inbox + spam) của email người nhận
-- Nếu không nhận được, kiểm tra:
-  1. App Password có đúng 16 ký tự không?
-  2. Gmail đã bật Xác minh 2 bước chưa?
-  3. Kiểm tra log terminal Odoo: tìm dòng `Email sent successfully` hoặc lỗi SMTP
-
----
-
-## 10. Test Báo cáo nâng cao
-
-### 10.1. Calendar View (Lịch)
-
-| View | Cách truy cập | Kiểm tra |
-|------|---------------|----------|
-| Lịch nghỉ phép | Nhân sự → Nghỉ phép → Icon Calendar | Hiện đơn nghỉ theo ngày, màu theo loại nghỉ |
-| Lịch đào tạo | Nhân sự → Đào tạo → Icon Calendar | Hiện khóa đào tạo theo ngày bắt đầu/kết thúc |
-| Lịch VB đến | Văn bản → VB đến → Icon Calendar | Hiện VB theo ngày đến, màu theo độ khẩn |
-| Lịch luân chuyển | Văn bản → Luân chuyển → Icon Calendar | Hiện phiếu theo ngày tạo |
-
-### 10.2. Pivot View (Bảng phân tích)
-
-| View | Cách truy cập | Kiểm tra |
-|------|---------------|----------|
-| Pivot bảng lương | Nhân sự → Bảng lương → Icon Pivot | Bảng: Đơn vị × Tháng = Thực lĩnh |
-| Pivot KPI | Nhân sự → KPI → Icon Pivot | Bảng: Đơn vị × Kỳ = Điểm TB |
-| Pivot đơn hàng | CRM → Đơn hàng → Icon Pivot | Bảng: KH × Trạng thái = Tổng tiền |
-| Pivot cơ hội | CRM → Cơ hội → Icon Pivot | Bảng: NV × Giai đoạn = Giá trị |
-| Pivot VB đến | Văn bản → VB đến → Icon Pivot | Bảng: Loại VB × Trạng thái |
-| Pivot VB đi | Văn bản → VB đi → Icon Pivot | Bảng: Loại VB × Trạng thái |
-
-### 10.3. Graph View (Biểu đồ)
-
-| View | Cách truy cập | Kiểm tra |
-|------|---------------|----------|
-| Biểu đồ lương | Nhân sự → Bảng lương → Icon Graph | Cột: Thu nhập/Thực lĩnh theo NV |
-| Biểu đồ KPI | Nhân sự → KPI → Icon Graph | Cột: Điểm TB theo NV |
-| Biểu đồ đơn hàng | CRM → Đơn hàng → Icon Graph | Bar + Line: Doanh thu theo trạng thái |
-| Biểu đồ cơ hội | CRM → Cơ hội → Icon Graph (list view) | Bar: Giá trị theo giai đoạn |
-| Biểu đồ thanh toán | CRM → Thanh toán → Icon Graph | Pie: Theo hình thức thanh toán |
-| Biểu đồ VB đến | Văn bản → VB đến → Icon Graph | Bar + Pie: Trạng thái, Độ khẩn |
-| Biểu đồ VB đi | Văn bản → VB đi → Icon Graph | Bar: Theo trạng thái |
-
----
-
-## 11. Test Chatbot AI
-
-### 11.1. Truy cập chatbot
-
-1. Menu: **Văn bản** → **Chatbot AI** hoặc tìm menu chatbot
-2. Giao diện chat mở ra
-
-### 11.2. Test các tình huống
-
-| # | Câu hỏi test | Kết quả mong đợi |
-|---|-------------|-----------------|
-| 1 | `Xin chào` | Chatbot chào hỏi |
-| 2 | `Hướng dẫn tạo văn bản đi` | Hướng dẫn chi tiết các bước |
-| 3 | `Có bao nhiêu văn bản đến trong tháng này?` | Trả lời dựa trên data hệ thống |
-| 4 | `Giải thích quy trình luân chuyển văn bản` | Mô tả quy trình |
-| 5 | Câu tiếng Anh: `How to create an incoming document?` | Trả lời bằng Anh/Việt |
-
-### 11.3. Xử lý lỗi chatbot
-
-- Nếu chatbot không phản hồi → Kiểm tra `GEMINI_API_KEY` trong `.env`
-- Nếu lỗi 429 → API rate limit, đợi 1 phút thử lại
-- Nếu lỗi 400 → Key không hợp lệ, tạo key mới
-
----
-
-## 12. Lệnh cập nhật module
-
-### Cập nhật code mới (khi sửa code)
+### Cập nhật module (khi thay đổi code)
 
 ```bash
-# Dừng server đang chạy
-pkill -f "odoo-bin"
-
-# Cập nhật 3 module
+# Dừng server (Ctrl+C), rồi chạy:
 python3 odoo-bin.py -c odoo.conf -d tranvanlam \
   -u nhan_su,quan_ly_khach_hang,quan_ly_van_ban \
   --stop-after-init
-
-# Khởi chạy lại
-nohup python3 odoo-bin.py -c odoo.conf -d tranvanlam > odoo.log 2>&1 &
-```
-
-### Cập nhật 1 module cụ thể
-
-```bash
-python3 odoo-bin.py -c odoo.conf -d tranvanlam -u nhan_su --stop-after-init
-```
-
-### Xem log realtime
-
-```bash
-tail -f odoo.log
+python3 odoo-bin.py -c odoo.conf -d tranvanlam
 ```
 
 ---
 
-## 13. Xử lý lỗi thường gặp
+## 4. Test Module Nhân sự (`nhan_su`)
 
-### Lỗi 1: `Cannot import name 'x509' from 'cryptography'`
+### 4.1 Quản lý danh mục
 
-```bash
-pip install cryptography==41.0.7 pyOpenSSL==23.3.0
-```
+**Menu**: `Nhân sự → Danh mục`
 
-### Lỗi 2: PostgreSQL connection refused
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo **Đơn vị / Phòng ban**: tên "Phòng Kỹ thuật", cấp độ 2 | Lưu thành công, hiển thị trong danh sách |
+| 2 | Tạo **Chức vụ**: tên "Kỹ sư phần mềm", cấp độ 3 | Lưu thành công |
+| 3 | Xem danh sách đơn vị → Tree view | Bảng danh sách phân cấp |
 
-```bash
-# Kiểm tra Docker container
-docker ps
-# Nếu không thấy, khởi động lại
-docker-compose up -d
-```
+### 4.2 Quản lý nhân viên
 
-### Lỗi 3: Port 8069 đã bị chiếm
+**Menu**: `Nhân sự → Nhân viên`
 
-```bash
-# Tìm process đang dùng port
-lsof -i :8069
-# Hoặc kill process Odoo cũ
-pkill -f "odoo-bin"
-```
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo nhân viên mới: Họ tên, CCCD (12 số), ngày sinh, phòng ban, chức vụ | Lưu thành công, sidebar chính xác |
+| 2 | Tải ảnh đại diện | Ảnh hiển thị trong form |
+| 3 | Chuyển sang tab "Thông tin ngân hàng", nhập số TK | Lưu thành công |
+| 4 | Xem Kanban view | Card nhân viên với ảnh, tên, phòng ban |
+| 5 | Tìm kiếm theo tên | Lọc đúng kết quả |
 
-### Lỗi 4: Email không gửi được
+### 4.3 Hợp đồng lao động
 
-1. Kiểm tra `.env`:
-   - `GMAIL_APP_PASSWORD` phải là **App Password 16 ký tự** (không phải mật khẩu Gmail thường)
-   - Gmail phải bật **Xác minh 2 bước**
-2. Kiểm tra email nhân viên/khách hàng có được điền không
-3. Xem log Odoo tìm lỗi SMTP
+**Menu**: `Nhân sự → Hợp đồng lao động`
 
-### Lỗi 5: Chatbot không phản hồi
+Workflow: **Dự thảo → Hiệu lực → Chấm dứt**
 
-1. Kiểm tra `GEMINI_API_KEY` trong `.env`
-2. Thử gọi API trực tiếp:
-```bash
-curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"contents":[{"parts":[{"text":"Hello"}]}]}'
-```
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo HĐLĐ: chọn nhân viên, loại HĐ "Không xác định thời hạn", lương cơ bản 15,000,000 | Tạo thành công, trạng thái "Dự thảo" |
+| 2 | Nhập phụ cấp, các khoản thưởng | Trường `tong_thu_nhap` tự tính |
+| 3 | Nhấn **"Kích hoạt"** | Chuyển sang "Hiệu lực" |
+| 4 | Nhấn **"Chấm dứt"** (nếu cần) | Chuyển sang "Chấm dứt" |
+| 5 | Cron tự động hết hạn | HĐ có thời hạn tự chuyển trạng thái sau ngày hết hạn |
 
-### Lỗi 6: Module không tìm thấy
+### 4.4 Nghỉ phép
 
-```bash
-# Kiểm tra addons_path trong odoo.conf chỉ đúng thư mục
-# Đảm bảo mỗi module có file __manifest__.py
-ls addons/nhan_su/__manifest__.py
-ls addons/quan_ly_khach_hang/__manifest__.py
-ls addons/quan_ly_van_ban/__manifest__.py
-```
+**Menu**: `Nhân sự → Nghỉ phép`
 
-### Lỗi 7: Lỗi `KeyNotFoundError` khi cài module
+Workflow: **Nháp → Chờ duyệt → Đã duyệt / Từ chối / Đã hủy**
 
-```bash
-# Reset database và cài lại
-python3 odoo-bin.py -c odoo.conf -d tranvanlam \
-  -u nhan_su,quan_ly_khach_hang,quan_ly_van_ban \
-  --stop-after-init
-```
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo đơn: loại "Phép năm", từ ngày, đến ngày, lý do | Mã đơn tự sinh (NP/...) |
+| 2 | Nhấn **"Gửi duyệt"** | Chuyển "Chờ duyệt" |
+| 3 | Nhấn **"Duyệt"** | Trạng thái "Đã duyệt" + email gửi cho nhân viên |
+| 4 | Tạo đơn khác → Nhấn **"Từ chối"** + nhập lý do | Trạng thái "Từ chối" |
+| 5 | Kiểm tra Calendar view | Lịch nghỉ phép hiển thị |
 
----
+### 4.5 Bảng lương
 
-## 14. Quy trình test hoàn chỉnh (Checklist)
+**Menu**: `Nhân sự → Bảng lương`
 
-### Phase 1: Chuẩn bị
-- [ ] Docker PostgreSQL đang chạy (`docker ps`)
-- [ ] File `.env` đã cấu hình API key + Gmail
-- [ ] 3 module đã cài đặt thành công
-- [ ] Server Odoo đang chạy (http://localhost:8069)
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo bảng lương tháng 3/2026: chọn nhân viên | Form mở |
+| 2 | Nhập ngày công thực tế, số ngày công chuẩn | Lương thực nhận tự tính |
+| 3 | Kiểm tra: BHXH (8%), BHYT (1.5%), BHTN (1%), thuế TNCN 7 bậc | Các khoản khấu trừ đúng |
+| 4 | Nhấn **"Chi trả"** | Trạng thái "Đã chi trả" + email thông báo |
+| 5 | Xem Pivot view | Tổng lương theo phòng ban/tháng |
 
-### Phase 2: Dữ liệu cơ sở
-- [ ] Tạo 2-3 đơn vị
-- [ ] Tạo 3-4 chức vụ
-- [ ] Tạo 3-5 nhân viên (có email thật)
-- [ ] Tạo 2-3 khách hàng (có email thật)
-- [ ] Tạo các loại văn bản
+### 4.6 Đánh giá KPI
 
-### Phase 3: Test HRM
-- [ ] Tạo hợp đồng lao động → Kích hoạt
-- [ ] Tạo đơn nghỉ phép → Duyệt → ✅ Nhận email
-- [ ] Tạo đơn nghỉ phép → Từ chối → ✅ Nhận email
-- [ ] Tạo bảng lương → Tính lương → Chi trả → ✅ Nhận email
-- [ ] Tạo đánh giá KPI → Phê duyệt
-- [ ] Tạo chương trình đào tạo
+**Menu**: `Nhân sự → Đánh giá KPI`
 
-### Phase 4: Test CRM
-- [ ] Tạo cơ hội → Kéo qua pipeline → Thắng → ✅ Nhận email
-- [ ] Tạo cơ hội → Thua → ✅ Nhận email
-- [ ] Tạo báo giá → Gửi → Duyệt
-- [ ] Tạo đơn hàng → Xác nhận → ✅ Nhận email
-- [ ] Đơn hàng → Hoàn thành → ✅ Nhận email
-- [ ] Tạo giao hàng → Cập nhật trạng thái
-- [ ] Tạo hóa đơn → Thanh toán → Kiểm tra công nợ
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo đánh giá: chọn nhân viên, kỳ "Tháng 3/2026" | Form mở |
+| 2 | Nhập điểm 5 tiêu chí (thang 1–5) | Điểm tổng tự tính |
+| 3 | Kiểm tra xếp loại tự động | Xuất sắc (≥4.5) / Tốt / Khá / TB / Yếu |
+| 4 | Xem Graph view | Biểu đồ điểm KPI |
 
-### Phase 5: Test QLVB
-- [ ] Tạo VB đến → Tiếp nhận → Phê duyệt → ✅ Nhận email
-- [ ] Tạo VB đi → Trình ký → Phê duyệt → Ban hành → ✅ Nhận email
-- [ ] Tạo sổ công văn → Mở/Khóa
-- [ ] Tạo phiếu luân chuyển → Cập nhật
-- [ ] Tạo hồ sơ lưu trữ
-- [ ] Test chatbot AI → Nhận phản hồi
+### 4.7 Đào tạo
 
-### Phase 6: Test Views nâng cao
-- [ ] Kiểm tra 4 Calendar views
-- [ ] Kiểm tra 6+ Pivot views
-- [ ] Kiểm tra 7+ Graph views
-- [ ] Kiểm tra Dashboard từng module
+**Menu**: `Nhân sự → Đào tạo`
 
-### Phase 7: Test Settings
-- [ ] Cấu hình Gmail trong Cài đặt → Lưu → Hoạt động
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo khoá đào tạo: tên, hình thức, chi phí, ngày bắt đầu–kết thúc | Lưu thành công |
+| 2 | Thêm danh sách nhân viên tham gia | Hiển thị đúng số người |
+| 3 | Xem Calendar view | Khoá đào tạo hiển thị trên lịch |
+
+### 4.8 Dashboard nhân sự
+
+**Menu**: `Nhân sự → Dashboard`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở Dashboard | Widget tổng số NV, NV đang làm, NV nghỉ hiển thị |
+| 2 | Kiểm tra biểu đồ | Chart.js render đúng |
 
 ---
 
-> **Ghi chú**: Tổng cộng có **~35 test cases** cần kiểm tra. Thời gian test toàn bộ tùy thuộc vào kinh nghiệm. Nên test theo thứ tự Phase 1 → 7 để đảm bảo dữ liệu đầy đủ cho các bước sau.
+## 5. Test Module CRM / Khách hàng (`quan_ly_khach_hang`)
+
+### 5.1 Quản lý khách hàng
+
+**Menu**: `Khách hàng → Khách hàng`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo KH cá nhân: họ tên, SĐT, email, địa chỉ | Mã KH tự sinh |
+| 2 | Tạo KH doanh nghiệp: tên công ty, MST, người liên hệ | Lưu thành công |
+| 3 | Phân tầng KH: "Vàng" | Cập nhật hiển thị trên card |
+| 4 | Xem Kanban view | Card KH với thông tin tóm tắt |
+
+### 5.2 Pipeline cơ hội bán hàng
+
+**Menu**: `Khách hàng → Cơ hội bán hàng`
+
+Workflow: **Mới → Đủ điều kiện → Đang báo giá → Đàm phán → Thắng / Thua**
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo cơ hội: tên, KH, nguồn "Website", giá trị 100M VND, ngày dự kiến chốt | Tạo thành công, giai đoạn "Mới" |
+| 2 | Nhấn **"Chuyển giai đoạn"** ×3 | Tiến lên "Đàm phán" |
+| 3 | Nhấn **"Đánh dấu Thắng"** | Giai đoạn "Thắng", trạng thái "Đã thắng" + email |
+| 4 | Kiểm tra biểu đồ Funnel | Số cơ hội mỗi giai đoạn đúng |
+| 5 | Tạo báo giá từ cơ hội (nút "Tạo báo giá") | Báo giá liên kết với cơ hội |
+
+### 5.3 Báo giá
+
+**Menu**: `Khách hàng → Báo giá`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở báo giá vừa tạo, thêm sản phẩm/dịch vụ + đơn giá + số lượng | Tổng tiền tự tính |
+| 2 | Nhấn **"Khách đồng ý"** | Trạng thái cập nhật |
+| 3 | Nhấn **"Tạo hợp đồng"** | Form hợp đồng liên kết sẵn thông tin |
+
+### 5.4 Hợp đồng bán hàng & Chữ ký điện tử
+
+**Menu**: `Khách hàng → Hợp đồng`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở hợp đồng, bổ sung điều khoản, giá trị | Lưu thành công |
+| 2 | Nhấn **"Ký hợp đồng"** → wizard chữ ký mở | Wizard hiển thị đúng |
+| 3 | Upload file chữ ký (PNG) + nhập mã xác nhận | Hợp đồng được đánh dấu đã ký |
+
+### 5.5 Đơn hàng → Giao hàng → Hóa đơn → Thanh toán
+
+**Menu**: `Khách hàng → Đơn hàng`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo đơn hàng từ cơ hội (hoặc trực tiếp): chọn KH, thêm sản phẩm | Mã đơn hàng tự sinh |
+| 2 | Nhấn **"Xác nhận đơn"** | Trạng thái "Đã xác nhận" + email KH |
+| 3 | Chuyển sang tab Giao hàng → Nhấn **"Xác nhận giao hàng"** | Phiếu giao hàng tạo |
+| 4 | Tạo hóa đơn từ đơn hàng | Hóa đơn liên kết |
+| 5 | Tạo thanh toán | Trạng thái "Đã thanh toán" + email |
+| 6 | Kiểm tra công nợ khách hàng | Dashboard công nợ cập nhật |
+
+### 5.6 Chấm điểm Lead
+
+**Menu**: `Khách hàng → Chấm điểm Lead`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo bản ghi chấm điểm cho KH | Form mở |
+| 2 | Nhập các tiêu chí (tương tác, ngân sách, thời gian...) | Điểm 0–100 tự tính |
+| 3 | Kiểm tra xếp hạng | Hot (≥75) / Warm / Cold / Frozen |
+
+### 5.7 Chiến dịch marketing & Khảo sát
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo chiến dịch: loại "Email Marketing", ngân sách, lọc KH | Tạo thành công |
+| 2 | Tạo khảo sát hài lòng cho KH đã mua: loại CSAT | Điểm hài lòng lưu |
+| 3 | Xem Pivot view chiến dịch | ROI, tỷ lệ phản hồi |
+
+### 5.8 Dashboard CRM
+
+**Menu**: `Khách hàng → Dashboard`
+
+| Kết quả mong đợi |
+|---|
+| Widget: Tổng doanh thu, Số cơ hội, Số KH, Đơn hàng tháng này |
+| Biểu đồ Chart.js render đúng |
+
+---
+
+## 6. Test Module Văn bản (`quan_ly_van_ban`)
+
+### 6.1 Danh mục loại văn bản
+
+**Menu**: `Văn bản → Danh mục → Loại văn bản`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo loại văn bản: "Quyết định", mã "QD" | Lưu thành công |
+| 2 | Tạo thêm: "Công văn", "Thông báo", "Hợp đồng" | Đủ danh mục |
+
+### 6.2 Sổ công văn
+
+**Menu**: `Văn bản → Sổ công văn`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo sổ VB đến 2026: loại "Đến", năm 2026 | Trạng thái "Mở" |
+| 2 | Tạo sổ VB đi 2026: loại "Đi", năm 2026 | Trạng thái "Mở" |
+| 3 | Khóa sổ cũ (2025 nếu có) | Trạng thái "Khóa", không thêm VB được |
+
+### 6.3 Văn bản đến
+
+**Menu**: `Văn bản → Văn bản đến`
+
+Workflow: **Mới → Đang xử lý → Đã xử lý / Quá hạn / Chuyển tiếp**
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo VBĐ: số ký hiệu "CV-001/2026", loại, đơn vị gửi, ngày đến, độ khẩn "Khẩn", hạn xử lý 5 ngày | Mã tự sinh, trạng thái "Mới" |
+| 2 | Upload file đính kèm (PDF) | File lưu thành công |
+| 3 | Phân công người xử lý → nhấn **"Phân công"** | Trạng thái "Đang xử lý" + email người xử lý |
+| 4 | Nhấn **"Đánh dấu đã xử lý"** | Trạng thái "Đã xử lý" |
+| 5 | Kiểm tra Calendar view | VBĐ hiển thị theo hạn xử lý |
+| 6 | Kiểm tra cron quá hạn | VBĐ hết hạn tự chuyển "Quá hạn" |
+
+### 6.4 Văn bản đi
+
+**Menu**: `Văn bản → Văn bản đi`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo VBĐi: số ký hiệu, loại, đơn vị nhận, nội dung tóm tắt | Lưu thành công |
+| 2 | Chọn luồng duyệt (nếu có cấu hình) | Luồng duyệt áp dụng |
+| 3 | Nhấn **"Gửi ký"** / upload chữ ký | Trạng thái cập nhật |
+| 4 | Nhấn **"Phát hành"** | VBĐi đã gửi + email thông báo KH (nếu có) |
+
+### 6.5 Luồng duyệt đa cấp
+
+**Menu**: `Văn bản → Luồng duyệt`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo luồng duyệt "Duyệt hợp đồng": 3 bước, mỗi bước chỉ định người duyệt | Lưu thành công |
+| 2 | Áp luồng vào VB đi | Bước duyệt hiển thị |
+| 3 | Người duyệt B1 xác nhận | Chuyển B2 |
+| 4 | Người duyệt cuối ký duyệt | Hoàn tất luồng |
+
+### 6.6 Chữ ký điện tử
+
+**Menu**: `Văn bản → Chữ ký điện tử`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở VB đi → Nhấn **"Ký điện tử"** | Wizard upload mở |
+| 2 | Upload file chữ ký + nhập thông tin | Hash được tạo và lưu |
+| 3 | Xem lịch sử audit trail | Ghi nhận thời gian, người ký, hash |
+
+### 6.7 OCR văn bản
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Upload file PDF/ảnh trong form VBĐ | File lưu |
+| 2 | Nhấn **"Trích xuất OCR"** (nếu có nút) | Nội dung text điền vào trường tóm tắt |
+
+### 6.8 Lưu trữ văn bản
+
+**Menu**: `Văn bản → Lưu trữ`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo phiếu lưu trữ: VB, tủ/kệ/ngăn, thời hạn lưu | Lưu thành công |
+| 2 | Đề xuất hủy VB hết hạn lưu | Trạng thái "Đề xuất hủy" |
+
+### 6.9 Phiếu luân chuyển
+
+**Menu**: `Văn bản → Luân chuyển`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo phiếu luân chuyển từ VBĐ → Phòng Kỹ thuật | Phiếu tạo thành công |
+| 2 | Phòng nhận xác nhận tiếp nhận | Bước luân chuyển ghi nhận |
+| 3 | Xem lịch sử luân chuyển | Mỗi bước có thời gian và người xử lý |
+
+### 6.10 Dashboard văn bản
+
+**Menu**: `Văn bản → Dashboard`
+
+| Kết quả mong đợi |
+|---|
+| Số VB đến theo trạng thái, VB quá hạn |
+| Số VB đi chờ ký, đã phát hành |
+| Biểu đồ theo tháng/loại |
+
+### 6.11 Mẫu văn bản
+
+**Menu**: `Văn bản → Mẫu văn bản`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Tạo mẫu: tên "Mẫu quyết định", nội dung Jinja2 | Lưu thành công |
+| 2 | Sinh VB từ mẫu | VB tự điền nội dung theo template |
+
+---
+
+## 7. Test Tích hợp liên module
+
+### 7.1 HRM → CRM
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở cơ hội bán hàng → trường "Nhân viên phụ trách" | Dropdown hiển thị danh sách `nhan_vien` |
+| 2 | Chọn NV phụ trách | Lưu thành công, liên kết đúng |
+| 3 | Mở đơn hàng → trường "Nhân viên phụ trách" | Tương tự |
+
+### 7.2 HRM → Văn bản
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở VBĐ → "Người xử lý" | Chọn từ `nhan_vien` |
+| 2 | Mở luồng duyệt → "Người duyệt bước 1" | Chọn từ `nhan_vien` |
+
+### 7.3 CRM → Văn bản (tự động tạo VBĐ)
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Trong cơ hội bán hàng → tạo hợp đồng | Form hợp đồng CRM mở |
+| 2 | Lưu hợp đồng CRM | VBĐi trong module Văn bản tự sinh liên kết hợp đồng |
+| 3 | Kiểm tra VBĐi trong Văn bản | `hop_dong_id` / `co_hoi_id` điền đúng |
+
+### 7.4 Email service tập trung (nhan_su → cả 3 module)
+
+| Module | Sự kiện | Email gửi đến |
+|---|---|---|
+| nhan_su | Duyệt nghỉ phép | Nhân viên xin nghỉ |
+| nhan_su | Chi trả bảng lương | Nhân viên được chi trả |
+| quan_ly_khach_hang | Thắng cơ hội | Nhân viên phụ trách |
+| quan_ly_khach_hang | Xác nhận đơn hàng | Khách hàng |
+| quan_ly_khach_hang | Hoàn thành đơn hàng | Khách hàng |
+| quan_ly_van_ban | Phân công VBĐ | Người xử lý |
+| quan_ly_van_ban | Phát hành VBĐi | Khách hàng liên quan |
+
+---
+
+## 8. Test Email Gmail
+
+### 8.1 Cấu hình
+
+**Menu**: `Nhân sự → Cài đặt → Cấu hình Email Gmail`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Nhập Gmail + App Password (16 ký tự, đọc từ `.env`) | Lưu thành công |
+| 2 | Nhấn **"Kiểm tra kết nối"** | Thông báo "Kết nối thành công!" |
+
+### 8.2 Gửi email thực
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Duyệt đơn nghỉ phép có email NV | Email đến inbox NV trong ≤2 phút |
+| 2 | Chi trả bảng lương | Email thông báo lương gửi đến NV |
+| 3 | Xác nhận đơn hàng có KH email | Email đến inbox KH |
+
+> **Lưu ý**: Nếu không nhận email, kiểm tra Spam và cấu hình Gmail SMTP.
+
+---
+
+## 9. Test Chatbot AI Gemini
+
+**Menu**: `Văn bản → Chatbot AI` (icon chat góc màn hình)
+
+### 9.1 Kiểm tra kết nối Gemini
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở chatbot | Widget chat hiển thị, trạng thái "Sẵn sàng" |
+| 2 | Gõ: `"Xin chào"` | Bot phản hồi trong <5 giây |
+
+### 9.2 Câu hỏi nghiệp vụ hệ thống
+
+| Câu hỏi | Kết quả mong đợi |
+|---|---|
+| `"Danh sách nhân viên phòng Kỹ thuật"` | Liệt kê NV đúng |
+| `"Có bao nhiêu văn bản đến chưa xử lý?"` | Số VB đang xử lý |
+| `"Cơ hội bán hàng tháng này"` | Tóm tắt pipeline |
+| `"Tổng doanh thu quý 1 năm 2026"` | Tra cứu và hiển thị số liệu |
+| `"Văn bản nào sắp quá hạn xử lý?"` | Danh sách VB gần deadline |
+
+### 9.3 Xem lịch sử hội thoại
+
+**Menu**: `Văn bản → Lịch sử chat`
+
+| Bước | Thao tác | Kết quả mong đợi |
+|---|---|---|
+| 1 | Mở lịch sử | Các cuộc hội thoại theo session |
+| 2 | Tìm kiếm theo nội dung | Filter đúng |
+
+---
+
+## 10. Checklist tổng hợp
+
+### Module `nhan_su`
+
+- [ ] Tạo phòng ban, chức vụ
+- [ ] Tạo nhân viên đầy đủ thông tin
+- [ ] Tạo và kích hoạt hợp đồng lao động
+- [ ] Xin và duyệt nghỉ phép → email gửi
+- [ ] Tạo bảng lương → chi trả → email gửi
+- [ ] Đánh giá KPI với điểm ≥ 4.5 → xếp loại "Xuất sắc"
+- [ ] Tạo khoá đào tạo → xem Calendar
+- [ ] Dashboard hiển thị đúng số liệu
+
+### Module `quan_ly_khach_hang`
+
+- [ ] Tạo KH cá nhân và doanh nghiệp
+- [ ] Tạo cơ hội → chuyển giai đoạn → Thắng → email
+- [ ] Báo giá → KH đồng ý → tạo hợp đồng → ký
+- [ ] Đơn hàng → Xác nhận → Giao hàng → Hóa đơn → Thanh toán → email
+- [ ] Lead scoring: điểm 80 → xếp "Hot"
+- [ ] Dashboard CRM hiển thị đúng số liệu
+
+### Module `quan_ly_van_ban`
+
+- [ ] Tạo sổ công văn đến/đi 2026
+- [ ] Tạo VBĐ → phân công → xử lý → email
+- [ ] Tạo VBĐi → duyệt → ký điện tử → phát hành
+- [ ] Luồng duyệt 3 bước hoạt động đúng
+- [ ] Phiếu luân chuyển ghi nhận từng bước
+- [ ] Lưu trữ vật lý với tủ/kệ/ngăn
+- [ ] Dashboard văn bản hiển thị đúng
+
+### Tích hợp
+
+- [ ] NV phụ trách cơ hội bán hàng lấy từ `nhan_vien`
+- [ ] VBĐi tự sinh từ hợp đồng CRM
+- [ ] Email service tập trung hoạt động cho cả 3 module
+- [ ] Chatbot trả lời câu hỏi nghiệp vụ đúng
+
+---
+
+> **Ghi chú**: Nếu gặp lỗi `Module not found` hoặc `ImportError`, chạy lại lệnh cập nhật module với flag `-u`. Nếu lỗi cơ sở dữ liệu, kiểm tra container Docker đang chạy (`sudo docker ps`).
