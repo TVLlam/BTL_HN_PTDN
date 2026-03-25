@@ -328,34 +328,28 @@ TTDN-16-01-N4/
 
 ### Dashboard tổng quan
 <p align="center">
-  <img src="<img width="1599" height="717" alt="Screenshot 2026-03-24 134354" src="https://github.com/user-attachments/assets/239a7da7-f67c-47c4-bcb0-c9f92bb85de2" />
-" width="900"/>
+  <img src="https://github.com/user-attachments/assets/239a7da7-f67c-47c4-bcb0-c9f92bb85de2" width="900"/>
 </p>
 
 ### Quản lý nhân sự
 <p align="center">
-  <img src="<img width="1599" height="778" alt="Screenshot 2026-03-23 161833" src="https://github.com/user-attachments/assets/8fafbaf8-fd61-407b-8022-46f98eaf0758" />
-" width="900"/>
+  <img src="https://github.com/user-attachments/assets/8fafbaf8-fd61-407b-8022-46f98eaf0758" width="900"/>
 </p>
 
 ### Dashboard khách hàng
 <p align="center">
-  <img src="<img width="1599" height="702" alt="Screenshot 2026-03-24 134447" src="https://github.com/user-attachments/assets/70f6ace7-c5d3-43f5-abeb-6536cbddf363" />
-" width="900"/>
+  <img src="https://github.com/user-attachments/assets/70f6ace7-c5d3-43f5-abeb-6536cbddf363" width="900"/>
 </p>
 
 ### Quản lý văn bản
 <p align="center">
-  <img src="<img width="1566" height="752" alt="Screenshot 2026-03-24 134620" src="https://github.com/user-attachments/assets/4eaa64cd-0dd1-4545-b7ed-d108ac9508ca" />
-" width="900"/>
+  <img src="https://github.com/user-attachments/assets/4eaa64cd-0dd1-4545-b7ed-d108ac9508ca" width="900"/>
 </p>
 
 ### Chatbot AI Gemini
 <p align="center">
-  <img src="<img width="1480" height="715" alt="Screenshot 2026-03-24 134915" src="https://github.com/user-attachments/assets/84a1bbf2-34f4-49be-a9fb-c65c7df245cb" />
-" width="900"/>
+  <img src="https://github.com/user-attachments/assets/84a1bbf2-34f4-49be-a9fb-c65c7df245cb" width="900"/>
 </p>
-
 ---
 
 ## 🔥 10. Demo
@@ -385,10 +379,8 @@ TTDN-16-01-N4/
 ## 🖼️ Poster
 
 <p align="center">
-  <img width="709" height="1024" alt="Poster" src="![POSTER_NHOM4](https://github.com/user-attachments/assets/4874e8d1-65d4-4912-8e87-d789f9b7797d)
-"/>
+  <img alt="Poster" src="https://github.com/user-attachments/assets/4874e8d1-65d4-4912-8e87-d789f9b7797d" width="709" height="1024"/>
 </p>
-
 ---
 
 ## 📝 License
